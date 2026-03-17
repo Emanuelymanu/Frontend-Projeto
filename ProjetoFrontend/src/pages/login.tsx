@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 // Aqui nós avisamos o React para carregar os estilos que vamos criar no passo 2
-import './css/login.css'; 
+import './css/login.css';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -61,7 +62,7 @@ export function Login() {
         </form>
 
         <div className="login-footer">
-          Não tem uma conta? <a href="#">Cadastre-se</a>
+  Não tem uma conta? <Link to="/cadastro">Cadastre-se</Link>
         </div>
 
       </div>

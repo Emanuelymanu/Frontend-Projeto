@@ -1,0 +1,161 @@
+/* home.css */
+
+/* Fundo geral da tela */
+.home-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f8fafc; /* Fundo cinza bem clarinho da direita */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* =========================================
+   MENU LATERAL (SIDEBAR)
+   ========================================= */
+.sidebar {
+  width: 260px;
+  background-color: white;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.sidebar-menu {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1; /* Isso empurra o botão 'Sair' lá pro final */
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  text-decoration: none;
+  color: #475569;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.menu-item:hover {
+  background-color: #f1f5f9;
+}
+
+/* Estilo para o item selecionado (Início) */
+.menu-item.active {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.menu-item.logout {
+  color: #ef4444; /* Vermelho do botão sair */
+}
+
+.menu-item.logout:hover {
+  background-color: #fef2f2;
+}
+
+/* =========================================
+   CONTEÚDO PRINCIPAL (DIREITA)
+   ========================================= */
+.main-content {
+  flex: 1; /* Ocupa todo o resto da tela */
+  padding: 40px;
+  overflow-y: auto; /* Permite rolar a página se tiver muito conteúdo */
+}
+
+/* Banner com Degradê */
+.welcome-banner {
+  background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+  border-radius: 16px;
+  padding: 40px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.banner-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.banner-content h1 {
+  margin: 16px 0 8px 0;
+  font-size: 28px;
+}
+
+.banner-content p {
+  margin: 0;
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.btn-personalizar {
+  background-color: white;
+  color: #475569;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: absolute; /* Para ficar no cantinho direito */
+  right: 60px;
+}
+
+.btn-personalizar:hover {
+  background-color: #f8fafc;
+}
+
+/* Seção Últimos Livros */
+.recent-books-section {
+  margin-top: 40px;
+}
+
+.recent-books-section h2 {
+  color: #0f172a;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.empty-state-card {
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #64748b;
+}
