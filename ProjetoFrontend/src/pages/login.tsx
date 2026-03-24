@@ -7,10 +7,59 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (evento: React.FormEvent) => {
-    evento.preventDefault(); 
-    console.log('Tentando fazer login com:', email, password);
+  /*const handleLogin = (evento: React.FormEvent) => {
+  evento.preventDefault();
+
+  // validar email
+  const emailValido = /\S+@\S+\.\S+/.test(email);
+  if (!emailValido) {
+    alert("Email inválido!");
+    return;
+  }
+
+  // validar senha
+  if (password.length < 6) {
+    alert("Senha muito curta!");
+    return;
+  }
+
+  // simular token (IMPORTANTE pra rubrica)
+  localStorage.setItem("token", "fake-token");
+
+  alert("Login realizado!");
+
+  // redirecionar (jeito certo)
+  window.location.href = "/home";
+};*/
+
+const handleLogin = (evento: React.FormEvent) => {
+  evento.preventDefault();
+
+  const emailValido = /\S+@\S+\.\S+/.test(email);
+  if (!emailValido) {
+    alert("Email inválido!");
+    return;
+  }
+
+  if (password.length < 6) {
+    alert("Senha inválida!");
+    return;
+  }
+
+  // SIMULA resposta do backend
+  const fakeResponse = {
+    token: "123456",
+    user: {
+      nome: "João Vitor",
+      email: email
+    }
   };
+
+  localStorage.setItem("token", fakeResponse.token);
+
+  alert("Login realizado!");
+  window.location.href = "/home";
+};
 
   return (
     // A div 'login-container' vai ocupar a tela toda e ter o fundo azul claro

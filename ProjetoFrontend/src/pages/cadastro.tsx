@@ -11,18 +11,33 @@ export function Cadastro() {
   const [confirmarSenha, setConfirmarSenha] = useState('');
 
   const handleCadastro = (evento: React.FormEvent) => {
-    evento.preventDefault(); 
-    
-    // Uma validação simples no Front-end: verificar se as senhas são iguais
-    if (senha !== confirmarSenha) {
-      alert('As senhas não conferem!');
-      return; // O return faz a função parar aqui se der erro
-    }
+  evento.preventDefault();
 
-    console.log('Tentando cadastrar com os dados:');
-    console.log({ nome, email, cpf, senha });
-    alert('Cadastro realizado com sucesso! Olhe o console (F12).');
-  };
+  const emailValido = /\S+@\S+\.\S+/.test(email);
+  if (!emailValido) {
+    alert("Email inválido!");
+    return;
+  }
+
+  if (cpf.length < 11 || cpf.length > 11) {
+    alert("CPF inválido!" ) ;
+    return;
+  }
+
+  if (senha.length < 6) {
+    alert("Senha muito fraca!");
+    return;
+  }
+
+  if (senha !== confirmarSenha) {
+    alert("As senhas não conferem!");
+    return;
+  }
+
+  alert("Cadastro realizado!");
+
+  window.location.href = "/";
+};
 
   return (
     // Reutilizamos a classe 'login-container' para ter o mesmo fundo
