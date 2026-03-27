@@ -7,7 +7,6 @@ import { Cadastro } from './pages/cadastro';
 import { Home } from './pages/home'; // <-- Adicionámos a importação da Home aqui!
 import { Dashboard } from './pages/dashboard';
 import { Biblioteca } from './pages/biblioteca';
-
 function App() {
   return (
     <BrowserRouter>

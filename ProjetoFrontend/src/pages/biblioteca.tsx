@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { LivroCard } from '../components/LivroCard';
 import { 
   Home as HomeIcon, 
   LayoutDashboard, 
@@ -8,21 +9,72 @@ import {
   BookPlus, 
   User, 
   Newspaper, 
-  LogOut,
-  Search // Importamos a lupa para a barra de pesquisa
+  LogOut
 } from 'lucide-react';
 
 import './css/biblioteca.css';
 
 export function Biblioteca() {
-  
-  // Estado para simular quantos livros foram encontrados
-  const [quantidadeLivros, setQuantidadeLivros] = useState(0);
+
+  const livros = [
+    {
+      id: 1,
+      titulo: "Harry Potter",
+      capa: "https://covers.openlibrary.org/b/id/7984916-L.jpg",
+      status: "Lido",
+      genero: "Fantasia",
+      editora: "Rocco",
+      avaliacao: 5
+    },
+    {
+      id: 2,
+      titulo: "O Hobbit",
+      capa: "https://covers.openlibrary.org/b/id/6979861-L.jpg",
+      status: "Lendo",
+      genero: "Fantasia",
+      editora: "Martins Fontes",
+      avaliacao: 4
+    }
+  ];
+
+  const [livroSelecionado, setLivroSelecionado] = useState<any>(null);
+
+  // FILTROS
+  const [statusFilter, setStatusFilter] = useState("todos");
+  const [generoFilter, setGeneroFilter] = useState("todos");
+  const [editoraFilter, setEditoraFilter] = useState("todos");
+  const [avaliacaoFilter, setAvaliacaoFilter] = useState("todos");
+  const [sortBy, setSortBy] = useState("titulo");
+
+  // PEGAR LISTAS ÚNICAS
+  const generos = [...new Set(livros.map(l => l.genero))];
+  const editoras = [...new Set(livros.map(l => l.editora))];
+
+  // FILTRAR
+  let livrosFiltrados = livros.filter((livro) => {
+    const statusOk = statusFilter === "todos" || livro.status === statusFilter;
+    const generoOk = generoFilter === "todos" || livro.genero === generoFilter;
+    const editoraOk = editoraFilter === "todos" || livro.editora === editoraFilter;
+    const avaliacaoOk =
+      avaliacaoFilter === "todos" ||
+      livro.avaliacao === Number(avaliacaoFilter);
+
+    return statusOk && generoOk && editoraOk && avaliacaoOk;
+  });
+
+  // ORDENAR
+  livrosFiltrados = [...livrosFiltrados].sort((a, b) => {
+    if (sortBy === "titulo") {
+      return a.titulo.localeCompare(b.titulo);
+    } else {
+      return b.id - a.id;
+    }
+  });
 
   return (
     <div className="biblioteca-container">
       
-      {/* MENU LATERAL (SIDEBAR) */}
+      {/* SIDEBAR */}
       <aside className="sidebar">
         <div className="sidebar-header">
           <BookOpen size={28} color="#1d4ed8" />
@@ -36,7 +88,6 @@ export function Biblioteca() {
           <a href="/dashboard" className="menu-item">
             <LayoutDashboard size={20} /> Dashboard
           </a>
-          {/* O item Biblioteca agora é o ativo! */}
           <a href="/biblioteca" className="menu-item active">
             <Library size={20} /> Biblioteca
           </a>
@@ -61,90 +112,108 @@ export function Biblioteca() {
         </div>
       </aside>
 
-      {/* CONTEÚDO PRINCIPAL */}
+      {/* CONTEÚDO */}
       <main className="main-content">
         
         <header className="page-header">
           <h1>Biblioteca</h1>
-          <p>{quantidadeLivros} livros encontrados</p>
+          <p>{livrosFiltrados.length} livros encontrados</p>
         </header>
 
-        {/* ÁREA DE FILTROS */}
+        {/* FILTROS */}
         <section className="filter-section">
           <div className="filter-card">
-            
-            {/* Campo de Busca */}
-            <div className="search-group">
-              <label>Buscar por título ou autor</label>
-              <div className="input-wrapper">
-                <Search size={18} color="#94a3b8" className="search-icon" />
-                <input type="text" placeholder="Digite para buscar..." />
-              </div>
-            </div>
 
-            {/* Grid dos Selects */}
             <div className="filters-grid">
-              
+
               <div className="select-group">
                 <label>Status</label>
-                <select>
-                  <option>Todos</option>
-                  <option>Lidos</option>
-                  <option>Lendo</option>
-                  <option>Não Lidos</option>
+                <select onChange={(e) => setStatusFilter(e.target.value)}>
+                  <option value="todos">Todos</option>
+                  <option value="Lido">Lido</option>
+                  <option value="Lendo">Lendo</option>
                 </select>
               </div>
 
               <div className="select-group">
                 <label>Gênero</label>
-                <select>
-                  <option>Todos</option>
-                  <option>Ficção</option>
-                  <option>Técnico</option>
-                  <option>Fantasia</option>
+                <select onChange={(e) => setGeneroFilter(e.target.value)}>
+                  <option value="todos">Todos</option>
+                  {generos.map((g) => (
+                    <option key={g}>{g}</option>
+                  ))}
                 </select>
               </div>
 
               <div className="select-group">
                 <label>Editora</label>
-                <select>
-                  <option>Todas</option>
+                <select onChange={(e) => setEditoraFilter(e.target.value)}>
+                  <option value="todos">Todas</option>
+                  {editoras.map((e) => (
+                    <option key={e}>{e}</option>
+                  ))}
                 </select>
               </div>
 
               <div className="select-group">
                 <label>Avaliação</label>
-                <select>
-                  <option>Todas</option>
-                  <option>1 Estrela</option>
-                  <option>2 Estrelas</option>
-                  <option>3 Estrelas</option>
-                  <option>4 Estrelas</option>
-                  <option>5 Estrelas</option>
+                <select onChange={(e) => setAvaliacaoFilter(e.target.value)}>
+                  <option value="todos">Todas</option>
+                  <option value="5">5</option>
+                  <option value="4">4</option>
+                  <option value="3">3</option>
                 </select>
               </div>
 
               <div className="select-group">
-                <label>Ordenar por</label>
-                <select>
-                    <option>A-Z</option>
-                  <option>Mais Recentes</option>
-                 <option>Menos Recentes</option>
-                </select>
+                <label>Ordenar</label>
+                <button onClick={() =>
+                  setSortBy(sortBy === "titulo" ? "id" : "titulo")
+                }>
+                  {sortBy === "titulo" ? "Título" : "Mais novos"}
+                </button>
               </div>
 
             </div>
           </div>
         </section>
 
-        {/* RESULTADO VAZIO */}
+        {/* GRID DE LIVROS */}
         <section className="results-section">
-          <div className="empty-results-card">
-            <p>Nenhum livro encontrado com os filtros selecionados</p>
+          <div className="livros-grid">
+            {livrosFiltrados.map((livro) => (
+              <LivroCard
+                key={livro.id}
+                livro={livro}
+                onClick={() => setLivroSelecionado(livro)}
+              />
+            ))}
           </div>
         </section>
 
       </main>
+
+      {/* MODAL */}
+      {livroSelecionado && (
+  <div className="modal-overlay" onClick={() => setLivroSelecionado(null)}>
+    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      
+      <h2>{livroSelecionado.titulo}</h2>
+      
+      <img src={livroSelecionado.capa} alt="" />
+      
+      <p>Status: {livroSelecionado.status}</p>
+      <p>Gênero: {livroSelecionado.genero}</p>
+      <p>Editora: {livroSelecionado.editora}</p>
+      <p>Avaliação: {livroSelecionado.avaliacao}</p>
+
+      <button onClick={() => setLivroSelecionado(null)}>
+        Fechar
+      </button>
+
+    </div>
+  </div>
+)}
     </div>
   );
 }
