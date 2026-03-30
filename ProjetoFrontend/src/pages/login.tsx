@@ -10,7 +10,7 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
 
 
   const handleLogin = async (evento: React.FormEvent) => {
@@ -26,6 +26,7 @@ export function Login() {
       const apiError = error as ApiError;
       setError(apiError.mensagem || "Erro ao fazer login")
       console.error("Erro no login", error);
+      navegate('/login');
     } finally {
       setLoading(false);
     }
