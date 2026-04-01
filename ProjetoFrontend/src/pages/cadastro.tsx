@@ -1,51 +1,90 @@
 import { useState } from 'react';
+
+import { Link, useNavigate } from 'react-router-dom';
+import { authService } from '../services/authService';
 // Aqui importamos o MESMO arquivo CSS do login, pois o estilo é o mesmo!
-import './/css/login.css'; 
+import './/css/login.css';
 
 export function Cadastro() {
   // Criando a memória para todos os campos do seu formulário
+  const navigate = useNavigate();
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [cpf, setCpf] = useState('');
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleCadastro = (evento: React.FormEvent) => {
-  evento.preventDefault();
+  const handleCadastro = async (evento: React.FormEvent) => {
+    evento.preventDefault();
 
-  const emailValido = /\S+@\S+\.\S+/.test(email);
-  if (!emailValido) {
-    alert("Email inválido!");
-    return;
-  }
+    // Uma validação simples no Front-end: verificar se as senhas são iguais
+    if (senha !== confirmarSenha) {
+      setError('As senhas não conferem!');
+      return; // O return faz a função parar aqui se der erro
+    }
 
-  if (cpf.length < 11 || cpf.length > 11) {
-    alert("CPF inválido!" ) ;
-    return;
-  }
+    const cpfNumerico = cpf.replace(/\D/g, '');
+    if (cpfNumerico.length !== 11) {
+      setError('CPF inválido! Digite 11 números');
+      return;
+    }
 
-  if (senha.length < 6) {
-    alert("Senha muito fraca!");
-    return;
-  }
 
-  if (senha !== confirmarSenha) {
-    alert("As senhas não conferem!");
-    return;
-  }
+    setLoading(true);
+    setError('');
 
-  alert("Cadastro realizado!");
 
-  window.location.href = "/";
-};
+    try {
+      const response = await authService.cadastro({
+        nome,
+        email,
+        cpf: cpfNumerico,
+        senha
+      });
+      console.log("Cadastro realizado com sucesso, faça login para continuar", response)
+      navigate('/login');
+    } catch (error: any) {
+      // Try to extract backend error message
+      let errorMensagem = "Erro ao cadastrar";
+      if (error?.mensagem) {
+        errorMensagem = error.mensagem;
+      } else if (error?.response?.data?.mensagem) {
+        errorMensagem = error.response.data.mensagem;
+      } else if (error?.message) {
+        errorMensagem = error.message;
+      }
+      setError(errorMensagem);
+      // Log full error for debugging
+      console.error("Erro no cadastro", error);
+    }
+  };
+
+  const formatarCPF = (valor: string) => {
+    const numeros = valor.replace(/\D/g, '');
+    if (numeros.length <= 11) {
+      return numeros
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d)/, '$1.$2')
+        .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+        .slice(0, 14);
+    }
+    return valor;
+  };
+
+  const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const valorFormatado = formatarCPF(e.target.value);
+    setCpf(valorFormatado);
+  };
 
   return (
     // Reutilizamos a classe 'login-container' para ter o mesmo fundo
     <div className="login-container">
-      
+
       {/* Reutilizamos a classe 'login-card' para o quadrado branco */}
       <div className="login-card">
-        
+
         {/* Mesmo ícone de Livro */}
         <div className="icon-container">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -55,77 +94,94 @@ export function Cadastro() {
 
         <h1 className="login-title">Criar Conta</h1>
         <p className="login-subtitle">Cadastre-se para começar</p>
+        {error && (
+          <div style={{
+            backgroundColor: '#fee2e2',
+            color: '#dc2626',
+            padding: '10px',
+            borderRadius: '6px',
+            marginBottom: '15px',
+            fontSize: '14px'
+          }}>
+            ❌ {error}
+          </div>
+        )}
 
         <form onSubmit={handleCadastro} className="login-form">
-          
+
           <div className="input-group">
             <label htmlFor="nome">Nome Completo</label>
-            <input 
+            <input
               id="nome"
-              type="text" 
+              type="text"
               placeholder="Seu nome"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
           <div className="input-group">
             <label htmlFor="email">Email</label>
-            <input 
+            <input
               id="email"
-              type="email" 
+              type="email"
               placeholder="seu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
           <div className="input-group">
             <label htmlFor="cpf">CPF</label>
-            <input 
+            <input
               id="cpf"
-              type="text" 
+              type="text"
               placeholder="000.000.000-00"
               value={cpf}
-              onChange={(e) => setCpf(e.target.value)}
+              onChange={handleCpfChange}
               required
+              disabled={loading}
             />
           </div>
 
           <div className="input-group">
             <label htmlFor="senha">Senha</label>
-            <input 
+            <input
               id="senha"
-              type="password" 
+              type="password"
               placeholder="••••••••"
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
           <div className="input-group">
             <label htmlFor="confirmarSenha">Confirmar Senha</label>
-            <input 
+            <input
               id="confirmarSenha"
-              type="password" 
+              type="password"
               placeholder="••••••••"
               value={confirmarSenha}
               onChange={(e) => setConfirmarSenha(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
-          <button type="submit" className="login-button">
+          <button type="submit" className="login-button" disabled={loading}>
             Cadastrar
           </button>
 
         </form>
 
         <div className="login-footer">
-          Já tem uma conta? <a href="#">Entrar</a>
+          Já tem uma conta?  <Link to="/login">Entrar</Link>
         </div>
 
       </div>

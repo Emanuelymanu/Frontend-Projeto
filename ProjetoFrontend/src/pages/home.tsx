@@ -20,7 +20,6 @@ export function Home() {
 
   const navigate = useNavigate();
   const [usuarioNome, setUsuarioNome] = useState<string>('');
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!authService.isAuthenticated()) {
@@ -32,7 +31,6 @@ export function Home() {
     if(usuario){
       setUsuarioNome(usuario.nome);
     }
-    setLoading(false);
 }, [navigate]);
 
 const handleLogout= ()=> {
