@@ -1,9 +1,6 @@
 import axios, { AxiosError, type AxiosInstance, type InternalAxiosRequestConfig } from 'axios';
 
 
-
-
-
 const API_URL = "http://localhost:3000/api";
 
 const api: AxiosInstance = axios.create({

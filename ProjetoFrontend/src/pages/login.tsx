@@ -12,7 +12,6 @@ export function Login() {
   const [loading, setLoading] = useState(false);
   const [, setError] = useState<string | null>(null);
 
-
   const handleLogin = async (evento: React.FormEvent) => {
     evento.preventDefault();
     setLoading(true);
@@ -31,6 +30,7 @@ export function Login() {
       setLoading(false);
     }
   };
+
 
   return (
     // A div 'login-container' vai ocupar a tela toda e ter o fundo azul claro
