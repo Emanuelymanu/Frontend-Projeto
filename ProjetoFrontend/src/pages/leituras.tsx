@@ -36,7 +36,10 @@ export function Leitura() {
   return (
     <div className="biblioteca-container">
 
-      <Sidebar />
+      <Sidebar 
+  onLogout={() => console.log("logout")} 
+  active="biblioteca" 
+/>
 
       <main className="main-content">
 
