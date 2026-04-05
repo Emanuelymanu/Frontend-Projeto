@@ -1,129 +1,92 @@
-import { 
-  Home as HomeIcon, 
-  LayoutDashboard, 
-  Library, 
-  BookOpen, 
-  Book,
-  BookPlus, 
-  User, 
-  Newspaper, 
-  LogOut, 
-  Circle,
-  BookMarked,
-  CheckCircle
-} from 'lucide-react';
+import { Sidebar } from "../components/sidebar";
+import { BookOpen, BookMarked, CheckCircle2, Circle } from "lucide-react";
+import "../css/dashboard.css";
 
-import './css/dashboard.css';
+const livrosMock = [
+  { id: 1, titulo: "Dom Casmurro", genero: "Ficção", status: "Lido" },
+  { id: 2, titulo: "Clean Code", genero: "Técnico", status: "Lendo" },
+  { id: 3, titulo: "Harry Potter", genero: "Fantasia", status: "Não lido" },
+  { id: 4, titulo: "Outro Livro", genero: "Ficção", status: "Lido" }
+];
 
 export function Dashboard() {
-  
-  // Variáveis simulando os dados que virão do Back-end no futuro
-  const stats = {
-    total: 0,
-    naoLidos: 0,
-    lendo: 0,
-    lidos: 0
-  };
+
+  const total = livrosMock.length;
+  const lidos = livrosMock.filter(l => l.status === "Lido").length;
+  const lendo = livrosMock.filter(l => l.status === "Lendo").length;
+  const naoLidos = livrosMock.filter(l => l.status === "Não lido").length;
+
+  const generos: any = {};
+  livrosMock.forEach(l => {
+    generos[l.genero] = (generos[l.genero] || 0) + 1;
+  });
+
+  const topGeneros = Object.entries(generos);
 
   return (
-    <div className="dashboard-container">
-      
-      {/* MENU LATERAL (SIDEBAR) */}
-      <aside className="sidebar">
-        <div className="sidebar-header">
-          <BookOpen size={28} color="#1d4ed8" />
-          <h2>Biblioteca</h2>
-        </div>
+    <div className="biblioteca-container">
 
-        <nav className="sidebar-menu">
-          <a href="/home" className="menu-item">
-            <HomeIcon size={20} /> Início
-          </a>
-          {/* Agora o Dashboard é o item ativo! */}
-          <a href="/dashboard" className="menu-item active">
-            <LayoutDashboard size={20} /> Dashboard
-          </a>
-          <a href="#" className="menu-item">
-            <Library size={20} /> Biblioteca
-          </a>
-          {/* Adicionei o item Leituras que vi na sua imagem */}
-          <a href="#" className="menu-item">
-            <Book size={20} /> Leituras
-          </a>
-          <a href="#" className="menu-item">
-            <BookPlus size={20} /> Cadastrar Livro
-          </a>
-          <a href="#" className="menu-item">
-            <User size={20} /> Minha Conta
-          </a>
-          <a href="#" className="menu-item">
-            <Newspaper size={20} /> News
-          </a>
-        </nav>
+      <Sidebar 
+  onLogout={() => console.log("logout")} 
+  active="biblioteca" 
+/>
 
-        <div className="sidebar-footer">
-          <a href="/" className="menu-item logout">
-            <LogOut size={20} /> Sair
-          </a>
-        </div>
-      </aside>
-
-      {/* CONTEÚDO PRINCIPAL */}
       <main className="main-content">
-        
+
         <header className="page-header">
           <h1>Dashboard</h1>
           <p>Visão geral da sua biblioteca</p>
         </header>
 
-        {/* Grid com os 4 Cards */}
-        <section className="stats-grid">
-          
-          {/* Card 1: Total */}
-          <div className="stat-card">
-            <div className="stat-info">
-              <span className="stat-title">Total de Livros</span>
-              <span className="stat-value">{stats.total}</span>
+        {/* CARDS */}
+        <div className="dashboard-cards">
+
+          <div className="card">
+            <div>
+              <p>Total</p>
+              <h2>{total}</h2>
             </div>
-            <div className="stat-icon">
-              <BookOpen size={32} color="#3b82f6" /> {/* Azul */}
-            </div>
+            <BookOpen />
           </div>
 
-          {/* Card 2: Não Lidos */}
-          <div className="stat-card">
-            <div className="stat-info">
-              <span className="stat-title">Não Lidos</span>
-              <span className="stat-value">{stats.naoLidos}</span>
+          <div className="card">
+            <div>
+              <p>Não Lidos</p>
+              <h2>{naoLidos}</h2>
             </div>
-            <div className="stat-icon">
-              <Circle size={32} color="#94a3b8" /> {/* Cinza */}
-            </div>
+            <Circle />
           </div>
 
-          {/* Card 3: Lendo */}
-          <div className="stat-card">
-            <div className="stat-info">
-              <span className="stat-title">Lendo</span>
-              <span className="stat-value">{stats.lendo}</span>
+          <div className="card">
+            <div>
+              <p>Lendo</p>
+              <h2>{lendo}</h2>
             </div>
-            <div className="stat-icon">
-              <BookMarked size={32} color="#f97316" /> {/* Laranja */}
-            </div>
+            <BookMarked />
           </div>
 
-          {/* Card 4: Lidos */}
-          <div className="stat-card">
-            <div className="stat-info">
-              <span className="stat-title">Lidos</span>
-              <span className="stat-value">{stats.lidos}</span>
+          <div className="card">
+            <div>
+              <p>Lidos</p>
+              <h2>{lidos}</h2>
             </div>
-            <div className="stat-icon">
-              <CheckCircle size={32} color="#22c55e" /> {/* Verde */}
-            </div>
+            <CheckCircle2 />
           </div>
 
-        </section>
+        </div>
+
+        {/* GÊNEROS */}
+        <div className="filter-card">
+          <h2>Gêneros</h2>
+
+          {topGeneros.map(([genero, qtd]: any) => (
+            <div key={genero} className="genre-item">
+              <span>{genero}</span>
+              <strong>{qtd}</strong>
+            </div>
+          ))}
+
+        </div>
 
       </main>
     </div>

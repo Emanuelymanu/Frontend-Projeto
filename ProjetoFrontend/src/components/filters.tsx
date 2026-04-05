@@ -1,0 +1,78 @@
+export function Filters(props: any) {
+  return (
+    <section className="filter-section">
+      <div className="filter-card">
+
+        <div className="filters-grid">
+
+          <div className="select-group">
+            <label>Status</label>
+            <select
+              value={props.statusFilter}
+              onChange={(e) => props.setStatusFilter(e.target.value)}
+            >
+              <option value="todos">Todos</option>
+              <option value="Lido">Lido</option>
+              <option value="Lendo">Lendo</option>
+            </select>
+          </div>
+
+          <div className="select-group">
+            <label>Gênero</label>
+            <select
+              value={props.generoFilter}
+              onChange={(e) => props.setGeneroFilter(e.target.value)}
+            >
+              <option value="todos">Todos</option>
+              {props.generos.map((g: any) => (
+                <option key={g}>{g}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="select-group">
+            <label>Editora</label>
+            <select
+              value={props.editoraFilter}
+              onChange={(e) => props.setEditoraFilter(e.target.value)}
+            >
+              <option value="todos">Todas</option>
+              {props.editoras.map((e: any) => (
+                <option key={e}>{e}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="select-group">
+            <label>Avaliação</label>
+            <select
+              value={props.avaliacaoFilter}
+              onChange={(e) => props.setAvaliacaoFilter(e.target.value)}
+            >
+              <option value="todos">Todas</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+
+          <div className="select-group">
+            <label>Ordenar</label>
+            <button
+              onClick={() =>
+                props.setSortBy(
+                  props.sortBy === "titulo" ? "id" : "titulo"
+                )
+              }
+            >
+              {props.sortBy === "titulo" ? "Título" : "Mais novos"}
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 // Aqui nós avisamos o React para carregar os estilos que vamos criar no passo 2
-import './css/login.css';
+import '../css/login.css';
 import { authService } from '../services/authService';
 import type { ApiError } from '../types/auth';
 

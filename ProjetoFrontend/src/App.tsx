@@ -5,7 +5,10 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Login } from './pages/login';
 import { Cadastro } from './pages/cadastro';
 import { Home } from './pages/home'; // <-- Adicionámos a importação da Home aqui!
+import { Biblioteca } from './pages/biblioteca';
 import { Dashboard } from './pages/dashboard';
+import { Leitura } from "./pages/leituras";
+import { MeuPerfil } from "./pages/MeuPerfil";
 import { authService } from './services/authService';
 
 
@@ -25,6 +28,10 @@ function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/biblioteca" element={<Biblioteca />} />
+        <Route path="/leitura" element={<Leitura />} />
+        <Route path="/MeuPerfil" element={<MeuPerfil />} />
+
         <Route
           path="/home"
           element={

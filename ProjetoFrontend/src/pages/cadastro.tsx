@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
 // Aqui importamos o MESMO arquivo CSS do login, pois o estilo é o mesmo!
-import './/css/login.css';
+import '../css/login.css';
 
 export function Cadastro() {
   // Criando a memória para todos os campos do seu formulário

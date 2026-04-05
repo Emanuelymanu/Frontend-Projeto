@@ -1,4 +1,4 @@
-import './css/components.css';
+import '../css/LivroCard.css';
 
 interface Livro {
   id: number;

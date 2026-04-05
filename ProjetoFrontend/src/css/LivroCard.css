@@ -1,22 +1,25 @@
 .book-card {
+  width: 180px;
   background: white;
   border-radius: 12px;
-  padding: 12px;
+  overflow: hidden;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid #e5e7eb;
+  transition: 0.2s;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
 .book-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
+/* CAPA */
 .book-cover {
   width: 100%;
-  height: 180px;
+  height: 250px;
   background: #f1f5f9;
-  border-radius: 8px;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,10 +32,22 @@
   object-fit: cover;
 }
 
+/* fallback (sem imagem) */
+.book-cover span {
+  font-size: 40px;
+}
+
+/* TÍTULO */
 .book-title {
-  margin-top: 10px;
   font-size: 14px;
   font-weight: 600;
-  color: #1e293b;
+  padding: 10px;
   text-align: center;
+}
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
 }
