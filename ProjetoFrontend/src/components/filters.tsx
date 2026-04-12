@@ -1,4 +1,61 @@
+import { useEffect } from "react";
+
 export function Filters(props: any) {
+
+  useEffect(() => {
+    let filtrados = props.livros;
+
+    // 🔥 STATUS
+    if (props.statusFilter !== "todos") {
+      filtrados = filtrados.filter(
+        (l: any) => l.status === props.statusFilter
+      );
+    }
+
+    // 🔥 GÊNERO
+    if (props.generoFilter !== "todos") {
+      filtrados = filtrados.filter(
+        (l: any) => l.genero === props.generoFilter
+      );
+    }
+
+    // 🔥 EDITORA
+    if (props.editoraFilter !== "todos") {
+      filtrados = filtrados.filter(
+        (l: any) => l.editora === props.editoraFilter
+      );
+    }
+
+    // 🔥 AVALIAÇÃO
+    if (props.avaliacaoFilter !== "todos") {
+      filtrados = filtrados.filter(
+        (l: any) => l.avaliacao === Number(props.avaliacaoFilter)
+      );
+    }
+
+    // 🔥 ORDENAÇÃO
+    if (props.sortBy === "titulo") {
+      filtrados = [...filtrados].sort((a: any, b: any) =>
+        a.titulo.localeCompare(b.titulo)
+      );
+    } else {
+      filtrados = [...filtrados].sort((a: any, b: any) =>
+        b.id - a.id
+      );
+    }
+
+    // 🔥 ENVIA PRA BIBLIOTECA
+    props.setLivrosFiltrados(filtrados);
+
+  }, [
+    props.livros,
+    props.statusFilter,
+    props.generoFilter,
+    props.editoraFilter,
+    props.avaliacaoFilter,
+    props.sortBy
+  ]);
+
   return (
     <section className="filter-section">
       <div className="filter-card">
@@ -25,7 +82,7 @@ export function Filters(props: any) {
             >
               <option value="todos">Todos</option>
               {props.generos.map((g: any) => (
-                <option key={g}>{g}</option>
+                <option key={g} value={g}>{g}</option>
               ))}
             </select>
           </div>
@@ -38,7 +95,7 @@ export function Filters(props: any) {
             >
               <option value="todos">Todas</option>
               {props.editoras.map((e: any) => (
-                <option key={e}>{e}</option>
+                <option key={e} value={e}>{e}</option>
               ))}
             </select>
           </div>

@@ -9,6 +9,7 @@ import { Biblioteca } from './pages/biblioteca';
 import { Dashboard } from './pages/dashboard';
 import { Leitura } from "./pages/leituras";
 import { MeuPerfil } from "./pages/MeuPerfil";
+import { CadastroLivro } from "./pages/CadastroLivro";
 import { authService } from './services/authService';
 
 
@@ -30,7 +31,9 @@ function App() {
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/biblioteca" element={<Biblioteca />} />
         <Route path="/leitura" element={<Leitura />} />
+        <Route path="/CadastroLivro" element={<CadastroLivro />} />
         <Route path="/MeuPerfil" element={<MeuPerfil />} />
+        
 
         <Route
           path="/home"

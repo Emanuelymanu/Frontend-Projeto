@@ -37,11 +37,15 @@ export function Sidebar({ onLogout, active }: SidebarProps) {
           <Library size={20} /> Biblioteca
         </Link>
 
-        <Link to="/leitura" className="menu-item">
-          <BookPlus size={20} /> Leituras
+        <Link to="/CadastroLivro" className={`menu-item ${active === "CadastroLivro" ? "active" : ""}`}>
+          <BookPlus size={20} /> Cadastrar
         </Link>
 
-        <Link to="/MeuPerfil" className="menu-item">
+        <Link to="/leitura" className={`menu-item ${active === "leitura" ? "active" : ""}`}>
+          <BookOpen size={20} /> Leituras
+        </Link>
+
+        <Link to="/MeuPerfil" className={`menu-item ${active === "MeuPerfil" ? "active" : ""}`}>
           <User size={20} /> Minha Conta
         </Link>
 

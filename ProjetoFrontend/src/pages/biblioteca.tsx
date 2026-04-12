@@ -4,73 +4,82 @@ import { Filters } from "../components/filters";
 import { LivroCard } from "../components/LivroCard";
 import "../css/biblioteca.css";
 
-const livrosMock = [
-  {
-  id: 1,
-  titulo: "Dom Casmurro",
-  autor: "Machado de Assis",
-  genero: "Ficção",
-  editora: "Saraiva",
-  status: "Lido",
-  avaliacao: 5,
-  capa: "https://covers.openlibrary.org/b/id/8225261-L.jpg"
-},
-  {
-  id: 2,
-  titulo: "Clean Code",
-  autor: "Robert C. Martin",
-  genero: "Técnico",
-  editora: "Alta Books",
-  status: "Lendo",
-  avaliacao: 4,
-capa: "https://m.media-amazon.com/images/I/41SH-SvWPxL._SX374_BO1,204,203,200_.jpg"},
-];
-
 export function Biblioteca() {
 
+  const [livros, setLivros] = useState([
+    {
+      id: 1,
+      titulo: "Harry Potter",
+      autor: "J.K Rowling",
+      genero: "Fantasia",
+      editora: "Rocco",
+      avaliacao: 5,
+      capa: "https://covers.openlibrary.org/b/id/7984916-L.jpg",
+      status: "Lido"
+    },
+    {
+      id: 2,
+      titulo: "O Hobbit",
+      autor: "Tolkien",
+      genero: "Fantasia",
+      editora: "HarperCollins",
+      avaliacao: 4,
+      capa: "https://covers.openlibrary.org/b/id/6979861-L.jpg",
+      status: "Lendo"
+    }
+  ]);
+
+  const [livroSelecionado, setLivroSelecionado] = useState<any>(null);
+
+  // 🔥 FILTROS (AGORA CORRETOS)
+  const [livrosFiltrados, setLivrosFiltrados] = useState(livros);
   const [statusFilter, setStatusFilter] = useState("todos");
   const [generoFilter, setGeneroFilter] = useState("todos");
   const [editoraFilter, setEditoraFilter] = useState("todos");
   const [avaliacaoFilter, setAvaliacaoFilter] = useState("todos");
   const [sortBy, setSortBy] = useState("titulo");
-const [livroSelecionado, setLivroSelecionado] = useState<any>(null);
 
-  const generos = [...new Set(livrosMock.map(l => l.genero))];
-  const editoras = [...new Set(livrosMock.map(l => l.editora))];
+  // 🔥 LISTAS DINÂMICAS
+  const generos = [...new Set(livros.map((l) => l.genero))];
+  const editoras = [...new Set(livros.map((l) => l.editora))];
 
-  let livrosFiltrados = livrosMock.filter((livro) => {
-    return (
-      (statusFilter === "todos" || livro.status === statusFilter) &&
-      (generoFilter === "todos" || livro.genero === generoFilter) &&
-      (editoraFilter === "todos" || livro.editora === editoraFilter) &&
-      (avaliacaoFilter === "todos" || livro.avaliacao === Number(avaliacaoFilter))
+  // 🔥 EXCLUIR
+  const excluirLivro = (id: number) => {
+    const novaLista = livros.filter((l) => l.id !== id);
+    setLivros(novaLista);
+    setLivrosFiltrados(novaLista);
+    setLivroSelecionado(null);
+  };
+
+  // 🔥 EDITAR
+  const editarLivro = (id: number) => {
+    const novoTitulo = prompt("Novo título:");
+
+    if (!novoTitulo) return;
+
+    const novaLista = livros.map((l) =>
+      l.id === id ? { ...l, titulo: novoTitulo } : l
     );
-  });
 
-  livrosFiltrados = [...livrosFiltrados].sort((a, b) => {
-    if (sortBy === "titulo") {
-      return a.titulo.localeCompare(b.titulo);
-    } else {
-      return Number(b.id) - Number(a.id);
-    }
-  });
+    setLivros(novaLista);
+    setLivrosFiltrados(novaLista);
+    setLivroSelecionado(null);
+  };
 
   return (
     <div className="biblioteca-container">
 
-      <Sidebar 
-  onLogout={() => console.log("logout")} 
-  active="biblioteca" 
-/>
+      <Sidebar onLogout={() => console.log("logout")} active="biblioteca" />
 
       <main className="main-content">
-        
-        <header className="page-header">
-          <h1>Biblioteca</h1>
-          <p>{livrosFiltrados.length} livros encontrados</p>
-        </header>
 
+        <h1>Biblioteca</h1>
+
+        {/* 🔥 FILTRO CORRETO */}
         <Filters
+          livros={livros}
+          generos={generos}
+          editoras={editoras}
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}
           generoFilter={generoFilter}
@@ -81,53 +90,53 @@ const [livroSelecionado, setLivroSelecionado] = useState<any>(null);
           setAvaliacaoFilter={setAvaliacaoFilter}
           sortBy={sortBy}
           setSortBy={setSortBy}
-          generos={generos}
-          editoras={editoras}
+          setLivrosFiltrados={setLivrosFiltrados}
         />
 
-        {livrosFiltrados.length === 0 ? (
-          <div className="empty-results-card">
-            <p>Nenhum livro encontrado</p>
-          </div>
-        ) : (
-          <div className="books-grid">
-            {livrosFiltrados.map((livro) => (
-              <LivroCard
-                key={livro.id}
-                livro={livro}
-                onClick={() => setLivroSelecionado(livro)}
-              />
-            ))}
-          </div>
-        )}
-
-        {livroSelecionado && (
-  <div className="modal-overlay">
-    <div className="modal-content">
-
-      <div className="modal-image">
-    {livroSelecionado.capa ? (
-      <img src={livroSelecionado.capa} />
-    ) : (
-      <span>📖</span>
-    )}
-  </div>
-
-      <h2>{livroSelecionado.titulo}</h2>
-      <p><strong>Autor:</strong> {livroSelecionado.autor}</p>
-      <p><strong>Gênero:</strong> {livroSelecionado.genero}</p>
-      <p><strong>Status:</strong> {livroSelecionado.status}</p>
-      <p><strong>Avaliação:</strong> {livroSelecionado.avaliacao} </p>
-
-      <button onClick={() => setLivroSelecionado(null)}>
-        Fechar
-      </button>
-
-    </div>
-  </div>
-)}
+        {/* 🔥 LISTA */}
+        <div className="livros-grid">
+          {livrosFiltrados.map((livro) => (
+            <LivroCard
+              key={livro.id}
+              livro={livro}
+              onClick={() => setLivroSelecionado(livro)}
+            />
+          ))}
+        </div>
 
       </main>
+
+      {/* 🔥 MODAL */}
+      {livroSelecionado && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+
+            <h2>{livroSelecionado.titulo}</h2>
+
+            <img src={livroSelecionado.capa} />
+
+            <p><strong>Autor:</strong> {livroSelecionado.autor}</p>
+            <p><strong>Gênero:</strong> {livroSelecionado.genero}</p>
+            <p><strong>Editora:</strong> {livroSelecionado.editora}</p>
+            <p><strong>Status:</strong> {livroSelecionado.status}</p>
+            <p><strong>Avaliação:</strong> {livroSelecionado.avaliacao}</p>
+
+            <button onClick={() => editarLivro(livroSelecionado.id)}>
+              Editar
+            </button>
+
+            <button onClick={() => excluirLivro(livroSelecionado.id)}>
+              Excluir
+            </button>
+
+            <button onClick={() => setLivroSelecionado(null)}>
+              Fechar
+            </button>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

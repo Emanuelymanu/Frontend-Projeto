@@ -38,7 +38,7 @@ export function Leitura() {
 
       <Sidebar 
   onLogout={() => console.log("logout")} 
-  active="biblioteca" 
+  active="leitura" 
 />
 
       <main className="main-content">

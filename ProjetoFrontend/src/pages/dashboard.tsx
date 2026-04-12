@@ -28,7 +28,7 @@ export function Dashboard() {
 
       <Sidebar 
   onLogout={() => console.log("logout")} 
-  active="biblioteca" 
+  active="dashboard" 
 />
 
       <main className="main-content">

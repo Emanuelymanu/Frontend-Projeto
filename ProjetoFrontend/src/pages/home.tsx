@@ -34,7 +34,6 @@ export function Home() {
   return (
     <div className="home-container">
 
-      {/* 🔥 SIDEBAR REUTILIZADA */}
       <Sidebar onLogout={handleLogout} active="home" />
 
       <main className="main-content">
