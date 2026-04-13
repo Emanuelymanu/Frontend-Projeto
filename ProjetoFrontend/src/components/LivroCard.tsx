@@ -1,11 +1,6 @@
-import '../css/LivroCard.css';
 
-interface Livro {
-  id: number;
-  titulo: string;
-  capa?: string;
-  status?: string;
-}
+import '../css/LivroCard.css';
+import type { Livro } from "../types/livro";
 
 interface LivroCardProps {
   livro: Livro;
@@ -13,19 +8,22 @@ interface LivroCardProps {
 }
 
 export function LivroCard({ livro, onClick }: LivroCardProps) {
+  // Monta a URL da capa se necessário
+  let capaUrl = livro.capa;
+  if (capaUrl && !capaUrl.startsWith('http')) {
+    capaUrl = `http://localhost:3000/uploads/${capaUrl}`;
+  }
   return (
     <div className="book-card" onClick={onClick}>
-      
       <div className="book-cover">
-        {livro.capa ? (
-          <img src={livro.capa} alt={livro.titulo} />
+        {capaUrl ? (
+          <img src={capaUrl} alt={livro.titulo} />
         ) : (
           <span>📖</span>
         )}
       </div>
-
       <h3 className="book-title">{livro.titulo}</h3>
-
     </div>
   );
 }
+

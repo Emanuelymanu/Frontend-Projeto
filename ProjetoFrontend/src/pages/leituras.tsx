@@ -6,22 +6,40 @@ import "../css/leitura.css";
 // MOCK
 const livrosMock = [
   {
-    id: 1,
+    id_livro: 1,
     titulo: "Dom Casmurro",
+    subtitulo: "",
     autor: "Machado de Assis",
+    tipo_obra: "unico",
+    nome_serie: "",
+    ano_publicacao: 1899,
+    num_paginas: 256,
+    editora: "Editora X",
     genero: "Ficção",
-    status: "Lendo",
+    capa: "https://covers.openlibrary.org/b/id/8225261-L.jpg",
+    status_leitura: "Lendo",
     avaliacao: 0,
-    capa: "https://covers.openlibrary.org/b/id/8225261-L.jpg"
+    created_at: "",
+    updated_at: "",
+    usuarioId: 1
   },
   {
-    id: 2,
+    id_livro: 2,
     titulo: "Clean Code",
+    subtitulo: "",
     autor: "Robert C. Martin",
+    tipo_obra: "unico",
+    nome_serie: "",
+    ano_publicacao: 2008,
+    num_paginas: 464,
+    editora: "Prentice Hall",
     genero: "Técnico",
-    status: "Lendo",
+    capa: "https://covers.openlibrary.org/b/id/9641984-L.jpg",
+    status_leitura: "Lendo",
     avaliacao: 0,
-    capa: "https://covers.openlibrary.org/b/id/9641984-L.jpg"
+    created_at: "",
+    updated_at: "",
+    usuarioId: 1
   }
 ];
 
@@ -31,15 +49,15 @@ export function Leitura() {
   const [statusNovo, setStatusNovo] = useState("");
   const [avaliacao, setAvaliacao] = useState(0);
 
-  const livrosLendo = livrosMock.filter(l => l.status === "Lendo");
+  const livrosLendo = livrosMock.filter(l => l.status_leitura === "Lendo");
 
   return (
     <div className="biblioteca-container">
 
-      <Sidebar 
-  onLogout={() => console.log("logout")} 
-  active="leitura" 
-/>
+      <Sidebar
+        onLogout={() => console.log("logout")}
+        active="leitura"
+      />
 
       <main className="main-content">
 
@@ -87,7 +105,7 @@ export function Leitura() {
                   <p>Avaliação:</p>
 
                   <div>
-                    {[1,2,3,4,5].map((n) => (
+                    {[1, 2, 3, 4, 5].map((n) => (
                       <button key={n} onClick={() => setAvaliacao(n)}>
                         ⭐
                       </button>

@@ -1,39 +1,38 @@
-import { useEffect } from "react";
 
 export function Filters(props: any) {
 
-  useEffect(() => {
+  function aplicarFiltro() {
     let filtrados = props.livros;
 
-    // 🔥 STATUS
+    // STATUS
     if (props.statusFilter !== "todos") {
       filtrados = filtrados.filter(
         (l: any) => l.status === props.statusFilter
       );
     }
 
-    // 🔥 GÊNERO
+    // GÊNERO
     if (props.generoFilter !== "todos") {
       filtrados = filtrados.filter(
         (l: any) => l.genero === props.generoFilter
       );
     }
 
-    // 🔥 EDITORA
+    // EDITORA
     if (props.editoraFilter !== "todos") {
       filtrados = filtrados.filter(
         (l: any) => l.editora === props.editoraFilter
       );
     }
 
-    // 🔥 AVALIAÇÃO
+    // AVALIAÇÃO
     if (props.avaliacaoFilter !== "todos") {
       filtrados = filtrados.filter(
         (l: any) => l.avaliacao === Number(props.avaliacaoFilter)
       );
     }
 
-    // 🔥 ORDENAÇÃO
+    // ORDENAÇÃO
     if (props.sortBy === "titulo") {
       filtrados = [...filtrados].sort((a: any, b: any) =>
         a.titulo.localeCompare(b.titulo)
@@ -44,24 +43,13 @@ export function Filters(props: any) {
       );
     }
 
-    // 🔥 ENVIA PRA BIBLIOTECA
     props.setLivrosFiltrados(filtrados);
-
-  }, [
-    props.livros,
-    props.statusFilter,
-    props.generoFilter,
-    props.editoraFilter,
-    props.avaliacaoFilter,
-    props.sortBy
-  ]);
+  }
 
   return (
     <section className="filter-section">
       <div className="filter-card">
-
-        <div className="filters-grid">
-
+        <div className="filters-grid" style={{ alignItems: 'end' }}>
           <div className="select-group">
             <label>Status</label>
             <select
@@ -73,7 +61,6 @@ export function Filters(props: any) {
               <option value="Lendo">Lendo</option>
             </select>
           </div>
-
           <div className="select-group">
             <label>Gênero</label>
             <select
@@ -86,7 +73,6 @@ export function Filters(props: any) {
               ))}
             </select>
           </div>
-
           <div className="select-group">
             <label>Editora</label>
             <select
@@ -99,7 +85,6 @@ export function Filters(props: any) {
               ))}
             </select>
           </div>
-
           <div className="select-group">
             <label>Avaliação</label>
             <select
@@ -114,7 +99,6 @@ export function Filters(props: any) {
               <option value="5">5</option>
             </select>
           </div>
-
           <div className="select-group">
             <label>Ordenar</label>
             <button
@@ -127,7 +111,9 @@ export function Filters(props: any) {
               {props.sortBy === "titulo" ? "Título" : "Mais novos"}
             </button>
           </div>
-
+          <div className="select-group" style={{ marginLeft: 8 }}>
+            <button onClick={aplicarFiltro} style={{ height: 32 }}>Filtrar</button>
+          </div>
         </div>
       </div>
     </section>

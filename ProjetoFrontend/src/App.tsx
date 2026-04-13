@@ -10,6 +10,7 @@ import { Dashboard } from './pages/dashboard';
 import { Leitura } from "./pages/leituras";
 import { MeuPerfil } from "./pages/MeuPerfil";
 import { CadastroLivro } from "./pages/CadastroLivro";
+import { EditarLivro } from "./pages/EditarLivro";
 import { authService } from './services/authService';
 
 
@@ -33,7 +34,8 @@ function App() {
         <Route path="/leitura" element={<Leitura />} />
         <Route path="/CadastroLivro" element={<CadastroLivro />} />
         <Route path="/MeuPerfil" element={<MeuPerfil />} />
-        
+        <Route path="/EditarLivro" element={<EditarLivro />} />
+
 
         <Route
           path="/home"
