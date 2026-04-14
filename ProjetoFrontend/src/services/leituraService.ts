@@ -1,14 +1,12 @@
 import api from "./api";
-import { type CriarLivroDTO, type LivroResponse } from '../types/livro';
-import { AxiosError } from "axios";
-import { LeituraResponse, type CriarLeituraDTO } from "../types/leitura";
+// import type { CriarLivroDTO, LivroResponse } from '../types/livro';
+import type { Leitura, LeituraResponse, ListarLeiturasResponse, CriarLeituraDTO, AtualizarProgressoDTO, AvaliarLeituraDTO } from "../types/leitura";
 
-class LivroServiceUpload {
-    async iniciarLeitura(dados: CriarLeituraDTO): Promise<LivroResponse> {
+class LeituraService {
+    async iniciarLeitura(dados: CriarLeituraDTO): Promise<LeituraResponse> {
         try {
             const response = await api.post<LeituraResponse>('/leituras/iniciar', dados);
             return response.data;
-
         } catch (error: any) {
             console.error('Erro ao iniciar leitura:', error);
             throw error.response?.data || { message: 'Erro ao iniciar leitura' };

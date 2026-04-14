@@ -6,11 +6,12 @@ import { Login } from './pages/login';
 import { Cadastro } from './pages/cadastro';
 import { Home } from './pages/home'; // <-- Adicionámos a importação da Home aqui!
 import { Biblioteca } from './pages/biblioteca';
+import { EditarLivro } from './pages/EditarLivro';
 import { Dashboard } from './pages/dashboard';
-import { Leitura } from "./pages/leituras";
+import LeiturasPage from "./pages/leituras";
 import { MeuPerfil } from "./pages/MeuPerfil";
 import { CadastroLivro } from "./pages/CadastroLivro";
-import { EditarLivro } from "./pages/EditarLivro";
+
 import { authService } from './services/authService';
 
 
@@ -31,7 +32,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/biblioteca" element={<Biblioteca />} />
-        <Route path="/leitura" element={<Leitura />} />
+        <Route path="/leitura" element={<LeiturasPage />} />
         <Route path="/CadastroLivro" element={<CadastroLivro />} />
         <Route path="/MeuPerfil" element={<MeuPerfil />} />
         <Route path="/EditarLivro" element={<EditarLivro />} />

@@ -56,6 +56,8 @@ class LivroServiceUpload {
             throw error.response?.data || { message: 'Erro ao deletar livro' };
         }
     }
+
+    
 }
 
 export default new LivroServiceUpload();

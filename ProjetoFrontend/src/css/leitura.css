@@ -80,3 +80,271 @@
   color: gold;
   transform: scale(1.2);
 }
+
+/* frontend/src/css/leitura.css */
+
+/* Modal grande */
+.modal-content-large {
+  max-width: 700px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.modal-header {
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  margin: 0 0 8px 0;
+  color: #1f2937;
+}
+
+/* Abas */
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tab {
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #6b7280;
+  transition: all 0.2s;
+}
+
+.tab-active {
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #3b82f6;
+  border-bottom: 2px solid #3b82f6;
+  font-weight: 500;
+}
+
+.tab-content {
+  margin-bottom: 20px;
+}
+
+/* Barra de progresso */
+.progress-info {
+  margin-bottom: 20px;
+}
+
+.progress-bar {
+  background: #e5e7eb;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-fill {
+  background: #3b82f6;
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+/* Navegação de páginas */
+.pagina-navegacao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background: #f3f4f6;
+  border-radius: 8px;
+}
+
+.pagina-navegacao button {
+  background: white;
+  border: 1px solid #d1d5db;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagina-navegacao button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Anotações */
+.anotacoes-lista {
+  max-height: 350px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+}
+
+.anotacao-item {
+  background: #f9fafb;
+  border-left: 4px solid #3b82f6;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+}
+
+.anotacao-item h4 {
+  margin: 0 0 8px 0;
+  color: #1f2937;
+}
+
+.anotacao-item p {
+  margin: 0 0 8px 0;
+  color: #4b5563;
+  white-space: pre-wrap;
+}
+
+.anotacao-botoes {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.anotacao-botoes button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.anotacao-botoes button:hover {
+  color: #3b82f6;
+}
+
+.sem-anotacoes {
+  color: #9ca3af;
+  text-align: center;
+  padding: 20px;
+}
+
+.btn-nova-anotacao {
+  width: 100%;
+  padding: 12px;
+  background: #e5e7eb;
+  border: 2px dashed #9ca3af;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.btn-nova-anotacao:hover {
+  background: #d1d5db;
+}
+
+.nova-anotacao-form {
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.nova-anotacao-form h4 {
+  margin: 0 0 12px 0;
+}
+
+.nova-anotacao-form input,
+.nova-anotacao-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.anotacao-edicao input,
+.anotacao-edicao textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.modal-footer button {
+  background: #9ca3af;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Botões de avaliação */
+.avaliacao-buttons {
+  display: flex;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.avaliacao-buttons button {
+  padding: 8px 12px;
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.avaliacao-buttons button.active {
+  background: #fbbf24;
+  color: white;
+  border-color: #fbbf24;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.button-group button {
+  padding: 8px 16px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}

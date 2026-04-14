@@ -124,8 +124,8 @@ export function Biblioteca() {
             <p><strong>Autor:</strong> {livroSelecionado.autor}</p>
             <p><strong>Gênero:</strong> {livroSelecionado.genero}</p>
             <p><strong>Editora:</strong> {livroSelecionado.editora}</p>
-            {/* <p><strong>Status:</strong> {livroSelecionado.status}</p> */}
-            {/* <p><strong>Avaliação:</strong> {"⭐".repeat(livroSelecionado.avaliacao)}</p> */}
+            <p><strong>Status:</strong> {livroSelecionado.status_leitura ?? "-"}</p>
+            <p><strong>Avaliação:</strong> {"⭐".repeat(Number(livroSelecionado.avaliacao) || 0)}</p>
 
             <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
               <button onClick={() => editarLivro(livroSelecionado)}>

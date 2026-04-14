@@ -32,7 +32,7 @@ class LivroService {
             throw axiosError.response?.data || { message: 'Erro ao criar livro' };
         }
     }
-    async editar(id: number, livro: Partial<LivroInput>): Promise<Livro> {
+    async editarComCapa(id: number, livro: Partial<LivroInput>): Promise<Livro> {
         try {
             const response = await api.put<LivroResponse>(`/livros/editar/${id}`, livro);
 
@@ -43,6 +43,16 @@ class LivroService {
         } catch (error) {
             const axiosError = error as AxiosError<ApiError>;
             throw axiosError.response?.data || { message: 'Erro ao editar livro' };
+        }
+    }
+
+    async editarSemCapa(id: number, dados: Partial<LivroInput>): Promise<Livro> {
+        try {
+            const response = await api.put(`/livros/editar/${id}`, dados);
+            return response.data.livro;
+        } catch (error: any) {
+            console.error('Erro ao editar livro:', error);
+            throw error.response?.data || { message: 'Erro ao editar livro' };
         }
     }
     async deletar(id: number): Promise<void> {
