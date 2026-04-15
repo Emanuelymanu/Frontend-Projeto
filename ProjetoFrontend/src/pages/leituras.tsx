@@ -40,9 +40,20 @@ export default function LeiturasPage() {
   const [abaAtiva, setAbaAtiva] = useState<"progresso" | "anotacoes" | "tags">("progresso");
 
 
+
   useEffect(() => {
     carregarLeituras();
+    carregarTags();
   }, []);
+
+  const carregarTags = async () => {
+    try {
+      const response = await tagService.listarTags();
+      setTags(response.tags);
+    } catch (err: any) {
+      showErrorToast("Erro ao carregar tags");
+    }
+  };
 
   const carregarLeituras = async () => {
     setLoading(true);
@@ -287,7 +298,8 @@ export default function LeiturasPage() {
                   num_paginas: leitura.livro?.num_paginas || 0,
                   genero: leitura.livro?.genero || "",
                   avaliacao: leitura.avaliacao || 0,
-                  capa: leitura.livro?.capa || ""
+                  capa: leitura.livro?.capa || "",
+                  status: leitura.status
                 }}
                 onClick={() => handleAbrirModal(leitura)}
               />
@@ -319,12 +331,14 @@ export default function LeiturasPage() {
                         style={{
                           background: vinculada ? tag.cor : '#f3f4f6',
                           color: vinculada ? '#fff' : '#222',
-                          border: 'none',
+                          border: vinculada ? '2px solid #222' : '2px dashed #888',
                           borderRadius: 6,
                           padding: '4px 12px',
                           cursor: 'pointer',
                           fontWeight: 500,
-                          opacity: vinculada ? 1 : 0.7
+                          opacity: 1,
+                          boxShadow: vinculada ? '0 0 4px #2224' : 'none',
+                          transition: 'all 0.2s'
                         }}
                         onClick={async () => {
                           if (!livroSelecionado) return;

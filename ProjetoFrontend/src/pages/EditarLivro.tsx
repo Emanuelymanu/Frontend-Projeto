@@ -3,6 +3,7 @@ import { Sidebar } from "../components/sidebar";
 import "../css/CadastroLivro.css";
 import LivroService from "../services/livroService";
 import LivroServiceUpload from "../services/livroServiceUpload";
+import { leituraService } from "../services/leituraService";
 
 import { useNavigate, useLocation } from "react-router-dom";
 import type { Livro } from "../types/livro";
@@ -63,25 +64,7 @@ export function EditarLivro() {
         }
         setLoading(true);
         try {
-          
-            let statusMapped: "Lido" | "Lendo" | "Quero Ler" | "Abandonado" | undefined = undefined;
-            switch (status) {
-                case "lido":
-                    statusMapped = "Lido";
-                    console.log('statusMapped', statusMapped)
-                    break;
-                case "lendo":
-                    statusMapped = "Lendo";
-                    break;
-                case "quero_ler":
-                    statusMapped = "Quero Ler";
-                    break;
-                case "abandonado":
-                    statusMapped = "Abandonado";
-                    break;
-                default:
-                    statusMapped = undefined;
-            }
+            // Atualiza dados do livro
             const dadosLivro = {
                 titulo,
                 subtitulo,
@@ -92,15 +75,20 @@ export function EditarLivro() {
                 num_paginas: numPaginas,
                 genero,
                 editora,
-                status_leitura: statusMapped,
                 avaliacao: Number(avaliacao),
             };
             if (capaFile) {
                 await LivroServiceUpload.editarComCapa(livro.id_livro, dadosLivro, capaFile);
             } else {
-                console.log('salvando alteração', dadosLivro)
                 await LivroService.editarSemCapa(livro.id_livro, dadosLivro);
             }
+
+            // Atualiza status da leitura associada, se existir
+            if (livro.leituras && livro.leituras.length > 0 && status) {
+                const leitura = livro.leituras[0];
+                await leituraService.atualizarProgresso(leitura.id_leitura, { status });
+            }
+
             showSuccessAlert("Livro atualizado com sucesso!");
             navigate("/biblioteca");
         } catch (err: any) {
@@ -121,7 +109,7 @@ export function EditarLivro() {
                 <h1>Editar Livro</h1>
                 <div className="form-wrapper">
                     <form onSubmit={handleSubmit} className="form-cadastro">
-                      
+
                         <div className="input-group">
                             <label>Capa</label>
                             <input
@@ -131,7 +119,7 @@ export function EditarLivro() {
                                 disabled={loading}
                             />
                         </div>
-                        
+
                         <div className="preview">
                             {capaPreview ? (
                                 <img src={capaPreview} alt="capa" />
@@ -139,7 +127,7 @@ export function EditarLivro() {
                                 <span>📖</span>
                             )}
                         </div>
-                     
+
                         <div className="input-group">
                             <label>Título *</label>
                             <input
@@ -149,7 +137,7 @@ export function EditarLivro() {
                                 required
                             />
                         </div>
-                     
+
                         <div className="input-group">
                             <label>Subtítulo</label>
                             <input
@@ -158,7 +146,7 @@ export function EditarLivro() {
                                 onChange={(e) => setSubtitulo(e.target.value)}
                             />
                         </div>
-                       
+
                         <div className="input-group">
                             <label>Autor</label>
                             <input
@@ -167,7 +155,7 @@ export function EditarLivro() {
                                 onChange={(e) => setAutor(e.target.value)}
                             />
                         </div>
-                        
+
                         <div className="input-group">
                             <label>Tipo de Obra</label>
                             <select
@@ -183,7 +171,7 @@ export function EditarLivro() {
                                 <option value="colecao">Coleção</option>
                             </select>
                         </div>
-                       
+
                         <div className="input-group">
                             <label>Nome da Série</label>
                             <input
@@ -192,7 +180,7 @@ export function EditarLivro() {
                                 onChange={(e) => setNomeSerie(e.target.value)}
                             />
                         </div>
-                        
+
                         <div className="input-group">
                             <label>Ano de Publicação</label>
                             <input
@@ -202,7 +190,7 @@ export function EditarLivro() {
                                 min={0}
                             />
                         </div>
-                        
+
                         <div className="input-group">
                             <label>Número de Páginas</label>
                             <input
@@ -212,7 +200,7 @@ export function EditarLivro() {
                                 min={0}
                             />
                         </div>
-                       
+
                         <div className="input-group">
                             <label>Gênero</label>
                             <input
@@ -221,7 +209,7 @@ export function EditarLivro() {
                                 onChange={(e) => setGenero(e.target.value)}
                             />
                         </div>
-                        
+
                         <div className="input-group">
                             <label>Editora</label>
                             <input
@@ -230,7 +218,7 @@ export function EditarLivro() {
                                 onChange={(e) => setEditora(e.target.value)}
                             />
                         </div>
-                        
+
                         <div className="input-group">
                             <label>Status</label>
                             <select
@@ -245,7 +233,7 @@ export function EditarLivro() {
                                 <option value="abandonado">Abandonado</option>
                             </select>
                         </div>
-                        
+
                         <div className="input-group">
                             <label>Avaliação</label>
                             <select
