@@ -13,8 +13,7 @@ export function Biblioteca() {
   const navigate = useNavigate();
 
   const [livros, setLivros] = useState<Livro[]>([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState<string>("");
+
   const [livroSelecionado, setLivroSelecionado] = useState<Livro | null>(null);
 
 
@@ -24,6 +23,10 @@ export function Biblioteca() {
   const [editoraFilter, setEditoraFilter] = useState("todos");
   const [avaliacaoFilter, setAvaliacaoFilter] = useState("todos");
   const [sortBy, setSortBy] = useState("titulo");
+  const handleLogout = () => {
+  localStorage.removeItem("token");
+  window.location.href = "/login";
+};
 
 
   useEffect(() => {
@@ -93,7 +96,7 @@ export function Biblioteca() {
   return (
     <div className="biblioteca-container">
 
-      <Sidebar onLogout={() => console.log("logout")} active="biblioteca" />
+      <Sidebar onLogout={handleLogout} active="Biblioteca" />
 
       <main className="main-content">
 
@@ -155,17 +158,28 @@ export function Biblioteca() {
             <p><strong>Status:</strong> {livroSelecionado.status_leitura ?? "-"}</p>
             <p><strong>Avaliação:</strong> {"⭐".repeat(Number(livroSelecionado.avaliacao) || 0)}</p>
 
-            <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-              <button onClick={() => editarLivro(livroSelecionado)}>
-                Editar
-              </button>
-              <button onClick={() => excluirLivro(livroSelecionado.id_livro)}>
-                Excluir
-              </button>
-              <button onClick={() => setLivroSelecionado(null)}>
-                Fechar
-              </button>
-            </div>
+            <div className="modal-actions">
+  <button
+    className="btn btn-edit"
+    onClick={() => editarLivro(livroSelecionado)}
+  >
+    Editar
+  </button>
+
+  <button
+    className="btn btn-delete"
+    onClick={() => excluirLivro(livroSelecionado.id_livro)}
+  >
+    Excluir
+  </button>
+
+  <button
+    className="btn btn-close"
+    onClick={() => setLivroSelecionado(null)}
+  >
+    Fechar
+  </button>
+</div>
           </div>
         </div>
       )}

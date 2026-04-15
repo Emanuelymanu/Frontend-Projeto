@@ -18,6 +18,10 @@ export function Dashboard() {
   const [dashboard, setDashboard] = useState<DashboardResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const handleLogout = () => {
+  localStorage.removeItem("token");
+  window.location.href = "/login";
+};
 
   useEffect(() => {
     carregarDashboard();
@@ -41,7 +45,7 @@ export function Dashboard() {
   if (loading) {
     return (
       <div className="biblioteca-container">
-        <Sidebar onLogout={() => console.log("logout")} active="dashboard" />
+        <Sidebar onLogout={handleLogout} active="dashboard" />
         <main className="main-content">
           <div className="loading-container">
             <p>Carregando estatísticas...</p>
@@ -54,7 +58,7 @@ export function Dashboard() {
   if (error) {
     return (
       <div className="biblioteca-container">
-        <Sidebar onLogout={() => console.log("logout")} active="dashboard" />
+        <Sidebar onLogout={handleLogout} active="dashboard" />
         <main className="main-content">
           <div className="error-container">
             <p>❌ {error}</p>
@@ -73,7 +77,7 @@ export function Dashboard() {
 
   return (
     <div className="biblioteca-container">
-      <Sidebar onLogout={() => console.log("logout")} active="dashboard" />
+      <Sidebar onLogout={handleLogout} active="dashboard" />
 
       <main className="main-content">
         <header className="page-header">

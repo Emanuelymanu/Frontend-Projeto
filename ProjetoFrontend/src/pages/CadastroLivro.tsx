@@ -20,6 +20,10 @@ export function CadastroLivro() {
   const [editora, setEditora] = useState("");
   const [capaFile, setCapaFile] = useState<File | null>(null);
   const [capaPreview, setCapaPreview] = useState("");
+  const handleLogout = () => {
+  localStorage.removeItem("token");
+  window.location.href = "/login";
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,10 +93,7 @@ export function CadastroLivro() {
   return (
     <div className="cadastro-container">
 
-      <Sidebar
-        onLogout={() => console.log("logout")}
-        active="CadastroLivro"
-      />
+      <Sidebar onLogout={handleLogout} active="CadastroLivro" />
 
       <main className="main-content">
 

@@ -32,6 +32,10 @@ export function EditarLivro() {
     const [capaPreview, setCapaPreview] = useState(livro?.capa || "");
     const [status, setStatus] = useState("");
     const [avaliacao, setAvaliacao] = useState("0");
+    const handleLogout = () => {
+  localStorage.removeItem("token");
+  window.location.href = "/login";
+};
 
     const handleCapaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -104,7 +108,7 @@ export function EditarLivro() {
 
     return (
         <div className="cadastro-container">
-            <Sidebar onLogout={() => console.log("logout")} active="EditarLivro" />
+            <Sidebar onLogout={handleLogout} active="EditarLivro" />
             <main className="main-content">
                 <h1>Editar Livro</h1>
                 <div className="form-wrapper">

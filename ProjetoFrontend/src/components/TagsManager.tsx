@@ -116,8 +116,8 @@ export function TagsManager({ tags, setTags, mostrarModalTags, setMostrarModalTa
                                     <>
                                         <span className="tag-badge" style={{ backgroundColor: tag.cor }}>{tag.nome}</span>
                                         <div className="tag-acoes">
-                                            <button onClick={() => setEditandoTag(tag)}>✏️</button>
-                                            <button onClick={() => handleDeletarTag(tag.id_tag)}>🗑️</button>
+                                            <button onClick={() => setEditandoTag(tag)}>Editar</button>
+                                            <button onClick={() => handleDeletarTag(tag.id_tag)}>Excluir</button>
                                         </div>
                                     </>
                                 )}

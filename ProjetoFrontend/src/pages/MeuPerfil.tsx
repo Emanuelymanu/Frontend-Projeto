@@ -23,6 +23,11 @@ export function MeuPerfil() {
   const [novaSenha, setNovaSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
 
+  const handleLogout = () => {
+  localStorage.removeItem("token");
+  window.location.href = "/login";
+};
+
 
   useEffect(() => {
     carregarPerfil();
@@ -179,7 +184,7 @@ export function MeuPerfil() {
   if (loading) {
     return (
       <div className="biblioteca-container">
-        <Sidebar onLogout={() => console.log("logout")} active="perfil" />
+        <Sidebar onLogout={handleLogout} active="MeuPerfil" />
         <main className="main-content">
           <div className="loading-container">
             <p>Carregando perfil...</p>
@@ -193,7 +198,7 @@ export function MeuPerfil() {
 
   return (
     <div className="biblioteca-container">
-      <Sidebar onLogout={() => console.log("logout")} active="perfil" />
+      <Sidebar onLogout={handleLogout} active="MeuPerfil" />
 
       <main className="main-content">
         <header className="page-header">

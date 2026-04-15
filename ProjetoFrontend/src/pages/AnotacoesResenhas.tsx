@@ -12,6 +12,10 @@ export function AnotacoesResenhas() {
     const [anotacoesPorLeitura, setAnotacoesPorLeitura] = useState<Record<number, Anotacao[]>>({});
     const [loading, setLoading] = useState(true);
     const [expandedLeitura, setExpandedLeitura] = useState<number | null>(null);
+    const handleLogout = () => {
+  localStorage.removeItem("token");
+  window.location.href = "/login";
+};
 
     useEffect(() => {
         async function fetchData() {
@@ -49,7 +53,7 @@ export function AnotacoesResenhas() {
     if (loading) {
         return (
             <div className="biblioteca-container">
-                <Sidebar onLogout={() => console.log("logout")} active="anotacoes-resenhas" />
+                <Sidebar onLogout={handleLogout} active="anotacoes-resenhas" />
                 <main className="main-content">
                     <div className="loading-container">
                         <p>Carregando resenhas e anotações...</p>
@@ -61,17 +65,17 @@ export function AnotacoesResenhas() {
 
     return (
         <div className="biblioteca-container">
-            <Sidebar onLogout={() => console.log("logout")} active="anotacoes-resenhas" />
+            <Sidebar onLogout={handleLogout} active="anotacoes-resenhas" />
 
             <main className="main-content">
                 <header className="page-header">
-                    <h1>📚 Resenhas e Anotações</h1>
+                    <h1> Resenhas e Anotações</h1>
                     <p>{leituras.length} livro(s) lido(s) com anotações</p>
                 </header>
 
                 {leituras.length === 0 ? (
                     <div className="empty-state">
-                        <p>📖 Nenhuma leitura concluída encontrada.</p>
+                        <p>Nenhuma leitura concluída encontrada.</p>
                         <p>Quando você terminar de ler um livro e escrever resenhas/anotações, elas aparecerão aqui.</p>
                     </div>
                 ) : (
@@ -115,14 +119,14 @@ export function AnotacoesResenhas() {
                                             {/* RESENHA */}
                                             {temResenha && (
                                                 <div className="resenha-section">
-                                                    <h4>📝 Resenha</h4>
+                                                    <h4>Resenha</h4>
                                                     <p className="resenha-texto">{leitura.resenha}</p>
                                                 </div>
                                             )}
 
                                             {/* ANOTAÇÕES */}
                                             <div className="anotacoes-section">
-                                                <h4>📌 Anotações {temAnotacoes && `(${anotacoes.length})`}</h4>
+                                                <h4> Anotações {temAnotacoes && `(${anotacoes.length})`}</h4>
                                                 {temAnotacoes ? (
                                                     <div className="anotacoes-lista">
                                                         {anotacoes.map((anotacao) => (

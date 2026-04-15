@@ -7,6 +7,7 @@ import { anotacaoService } from "../services/anotacaoService";
 import type { Anotacao } from "../types/anotacao";
 import type { Leitura, StatusLeitura } from "../types/leitura";
 import { showErrorToast, showSuccessToast, showWarningToast, showConfirmDialog } from "../utils/alertUtils";
+import "../css/tags.css";
 import "../css/leitura.css";
 // import { Tag as TagIcon } from "lucide-react"; // Removido pois não está em uso
 
@@ -45,6 +46,11 @@ export default function LeiturasPage() {
     carregarLeituras();
     carregarTags();
   }, []);
+
+  const handleLogout = () => {
+  localStorage.removeItem("token");
+  window.location.href = "/login";
+};
 
   const carregarTags = async () => {
     try {
@@ -243,7 +249,7 @@ export default function LeiturasPage() {
   if (loading) {
     return (
       <div className="biblioteca-container">
-        <Sidebar onLogout={() => console.log("logout")} active="leitura" />
+        <Sidebar onLogout={handleLogout} active="leitura" />
         <main className="main-content">
           <div style={{ textAlign: "center", padding: "50px" }}>
             Carregando suas leituras...
@@ -257,7 +263,7 @@ export default function LeiturasPage() {
 
   return (
     <div className="biblioteca-container">
-      <Sidebar onLogout={() => console.log("logout")} active="leitura" />
+      <Sidebar onLogout={handleLogout} active="leitura" />
 
       <main className="main-content">
         <header className="page-header">
@@ -267,15 +273,14 @@ export default function LeiturasPage() {
 
 
         {/* SEÇÃO DE TAGS */}
-        <div style={{ margin: '24px 0' }}>
-          <button
-            className="btn-nova-tag"
-            style={{ padding: '8px 16px', borderRadius: 6, background: '#3b82f6', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 500 }}
-            onClick={() => setMostrarModalTags(true)}
-          >
-            🏷️ Gerenciar Tags
-          </button>
-        </div>
+        <div className="tags-section">
+  <button
+    className="btn-nova-tag"
+    onClick={() => setMostrarModalTags(true)}
+  >
+    🏷️ Gerenciar Tags
+  </button>
+</div>
         <TagsManager
           tags={tags}
           setTags={setTags}
@@ -319,27 +324,17 @@ export default function LeiturasPage() {
               </div>
 
               {/* BLOCO DE TAGS VINCULADAS */}
-              <div style={{ margin: '16px 0' }}>
-                <h4>Tags:</h4>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              <div className="tags-vinculadas-container">
+  <h4>Tags:</h4>
+  <div className="tags-vinculadas-lista">
                   {tags.length === 0 && <span style={{ color: '#888' }}>Nenhuma tag cadastrada.</span>}
                   {tags.map(tag => {
                     const vinculada = livroSelecionado?.tags?.some((t: Tag) => t.id_tag === tag.id_tag);
                     return (
                       <button
-                        key={tag.id_tag}
-                        style={{
-                          background: vinculada ? tag.cor : '#f3f4f6',
-                          color: vinculada ? '#fff' : '#222',
-                          border: vinculada ? '2px solid #222' : '2px dashed #888',
-                          borderRadius: 6,
-                          padding: '4px 12px',
-                          cursor: 'pointer',
-                          fontWeight: 500,
-                          opacity: 1,
-                          boxShadow: vinculada ? '0 0 4px #2224' : 'none',
-                          transition: 'all 0.2s'
-                        }}
+  key={tag.id_tag}
+  className={`tag-btn ${vinculada ? "ativa" : ""}`}
+  style={{ backgroundColor: vinculada ? tag.cor : undefined }}
                         onClick={async () => {
                           if (!livroSelecionado) return;
                           try {
@@ -376,13 +371,13 @@ export default function LeiturasPage() {
                   className={abaAtiva === "progresso" ? "tab-active" : "tab"}
                   onClick={() => setAbaAtiva("progresso")}
                 >
-                  📊 Progresso
+                  Progresso
                 </button>
                 <button
                   className={abaAtiva === "anotacoes" ? "tab-active" : "tab"}
                   onClick={() => setAbaAtiva("anotacoes")}
                 >
-                  📝 Anotações ({anotacoes.length})
+                  Anotações ({anotacoes.length})
                 </button>
               </div>
 
@@ -527,8 +522,8 @@ export default function LeiturasPage() {
                               {anotacao.titulo && <h4>{anotacao.titulo}</h4>}
                               <p>{anotacao.conteudo}</p>
                               <div className="anotacao-botoes">
-                                <button onClick={() => setEditandoAnotacao(anotacao)}>✏️ Editar</button>
-                                <button onClick={() => handleDeletarAnotacao(anotacao.id_anotacao)}>🗑️ Excluir</button>
+                                <button onClick={() => setEditandoAnotacao(anotacao)}>Editar</button>
+                                <button onClick={() => handleDeletarAnotacao(anotacao.id_anotacao)}>Excluir</button>
                               </div>
                             </>
                           )}

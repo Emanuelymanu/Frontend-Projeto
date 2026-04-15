@@ -104,13 +104,13 @@
   margin-top: 10px;
   padding: 14px;
   border: none;
-  background: #1d4ed8;
+  background: #1d4ed8 !important;
   color: white;
-  border-radius: 8px;
+  border-radius: 8px; 
   cursor: pointer;
   font-weight: 600;
 }
 
 .btn-salvar:hover {
-  background: #1e40af;
+  background: #1e40af !important;
 }
