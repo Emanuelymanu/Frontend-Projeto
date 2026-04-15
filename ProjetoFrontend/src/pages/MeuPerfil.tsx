@@ -3,6 +3,7 @@ import { Sidebar } from "../components/sidebar";
 import { perfilService } from "../services/perfilServece";
 import { authService } from "../services/authService";
 import type { UsuarioPerfil } from "../types/perfil";
+import { showErrorToast, showSuccessToast,showWarningToast } from "../utils/alertUtils";
 import "../css/MeuPerfil.css";
 
 export function MeuPerfil() {
@@ -11,10 +12,10 @@ export function MeuPerfil() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  
+
 
   const [perfil, setPerfil] = useState<UsuarioPerfil | null>(null);
-  
+
 
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
@@ -36,7 +37,7 @@ export function MeuPerfil() {
       setNome(data.nome);
       setCpf(formatarCPF(data.cpf));
     } catch (err: any) {
-      console.error("Erro ao carregar perfil:", err);
+      showErrorToast("Erro ao carregar perfil:");
       setError(err.erro || "Erro ao carregar perfil");
     } finally {
       setLoading(false);
@@ -65,96 +66,96 @@ export function MeuPerfil() {
   };
 
   const handleSalvar = async () => {
-    setError("");
+    showWarningToast("");
     setSuccess("");
 
     if (!nome.trim()) {
-      setError("O nome é obrigatório");
+      showWarningToast("O nome é obrigatório");
       return;
     }
-    
+
     if (nome.trim().length < 3) {
-      setError("O nome deve ter pelo menos 3 caracteres");
+      showWarningToast("O nome deve ter pelo menos 3 caracteres");
       return;
     }
-    
+
     if (nome.trim().length > 100) {
-      setError("O nome deve ter no máximo 100 caracteres");
+      showWarningToast("O nome deve ter no máximo 100 caracteres");
       return;
     }
-    
-    
+
+
     let cpfEnviar: string | undefined;
     if (cpf !== formatarCPF(perfil?.cpf || "")) {
       const cpfLimpo = desformatarCPF(cpf);
       if (cpfLimpo.length !== 11) {
-        setError("CPF deve conter 11 dígitos");
+        showWarningToast("CPF deve conter 11 dígitos");
         return;
       }
       cpfEnviar = cpfLimpo;
     }
-    
-   
+
+
     let senhaEnviar: string | undefined;
     if (novaSenha) {
       if (novaSenha !== confirmarSenha) {
-        setError("As senhas não conferem");
+        showWarningToast("As senhas não conferem");
         return;
       }
-      
+
       if (novaSenha.length < 6) {
-        setError("A nova senha deve ter no mínimo 6 caracteres");
+        showWarningToast("A nova senha deve ter no mínimo 6 caracteres");
         return;
       }
-      
+
       const senhaForte = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
       if (!senhaForte.test(novaSenha)) {
-        setError("A senha deve conter letras e números");
+        showWarningToast("A senha deve conter letras e números");
         return;
       }
-      
+
       senhaEnviar = novaSenha;
     }
-    
-  
+
+
     if (nome === perfil?.nome && !cpfEnviar && !senhaEnviar) {
       setEditando(false);
       return;
     }
-    
+
     setSaving(true);
-    
+
     try {
       const dadosAtualizar: any = {};
       if (nome !== perfil?.nome) dadosAtualizar.nome = nome;
       if (cpfEnviar) dadosAtualizar.cpf = cpfEnviar;
       if (senhaEnviar) dadosAtualizar.senha = senhaEnviar;
-      
+
       const response = await perfilService.atualizarPerfil(dadosAtualizar);
-      
+
 
       setPerfil(response.usuario);
-      setSuccess(response.mensagem || "Perfil atualizado com sucesso!");
+      showSuccessToast("Perfil atualizado com sucesso!");
 
       const user = authService.getUser();
       if (user && response.usuario) {
         user.nome = response.usuario.nome;
         localStorage.setItem('usuario', JSON.stringify(user));
       }
-      
+
 
       setSenhaAtual("");
       setNovaSenha("");
       setConfirmarSenha("");
-      
-     
+
+
       setTimeout(() => {
         setEditando(false);
         setSuccess("");
       }, 2000);
-      
+
     } catch (err: any) {
-      console.error("Erro ao salvar:", err);
+      showErrorToast("Erro ao salvar");
       setError(err.erro || "Erro ao salvar alterações");
     } finally {
       setSaving(false);
@@ -162,7 +163,7 @@ export function MeuPerfil() {
   };
 
   const handleCancelar = () => {
-  
+
     if (perfil) {
       setNome(perfil.nome);
       setCpf(formatarCPF(perfil.cpf));
@@ -188,19 +189,7 @@ export function MeuPerfil() {
     );
   }
 
-  if (error && !perfil) {
-    return (
-      <div className="biblioteca-container">
-        <Sidebar onLogout={() => console.log("logout")} active="perfil" />
-        <main className="main-content">
-          <div className="error-container">
-            <p>❌ {error}</p>
-            <button onClick={carregarPerfil}>Tentar novamente</button>
-          </div>
-        </main>
-      </div>
-    );
-  }
+
 
   return (
     <div className="biblioteca-container">
@@ -219,42 +208,32 @@ export function MeuPerfil() {
               <div className="avatar-placeholder">
                 <span>{perfil?.nome.charAt(0).toUpperCase()}</span>
               </div>
-              
+
               <h2>{perfil?.nome}</h2>
-              
+
               <div className="info-group">
                 <label> Email</label>
                 <p>{perfil?.email}</p>
               </div>
-              
+
               <div className="info-group">
                 <label> CPF</label>
                 <p>{formatarCPF(perfil?.cpf || "")}</p>
               </div>
-              
-             
-              
+
+
+
               <button className="btn-editar" onClick={() => setEditando(true)}>
-                 Editar Perfil
+                Editar Perfil
               </button>
             </div>
           ) : (
 
             <div className="perfil-edicao">
               <h2>Editar Perfil</h2>
+
               
-              {error && (
-                <div className="alert-error">
-                  ❌ {error}
-                </div>
-              )}
-              
-              {success && (
-                <div className="alert-success">
-                  ✅ {success}
-                </div>
-              )}
-              
+
               <div className="form-group">
                 <label>Nome completo *</label>
                 <input
@@ -265,7 +244,7 @@ export function MeuPerfil() {
                   disabled={saving}
                 />
               </div>
-              
+
               <div className="form-group">
                 <label>Email</label>
                 <input
@@ -276,7 +255,7 @@ export function MeuPerfil() {
                 />
                 <small>O email não pode ser alterado</small>
               </div>
-              
+
               <div className="form-group">
                 <label>CPF</label>
                 <input
@@ -288,13 +267,13 @@ export function MeuPerfil() {
                   disabled={saving}
                 />
               </div>
-              
+
               <div className="form-divider">
                 <hr />
                 <span>Alterar senha (opcional)</span>
                 <hr />
               </div>
-              
+
               <div className="form-group">
                 <label>Nova senha</label>
                 <input
@@ -306,7 +285,7 @@ export function MeuPerfil() {
                 />
                 <small>Mínimo 6 caracteres, com letras e números</small>
               </div>
-              
+
               <div className="form-group">
                 <label>Confirmar nova senha</label>
                 <input
@@ -317,17 +296,17 @@ export function MeuPerfil() {
                   disabled={saving}
                 />
               </div>
-              
+
               <div className="form-buttons">
-                <button 
-                  className="btn-salvar" 
+                <button
+                  className="btn-salvar"
                   onClick={handleSalvar}
                   disabled={saving}
                 >
                   {saving ? "Salvando..." : " Salvar alterações"}
                 </button>
-                <button 
-                  className="btn-cancelar" 
+                <button
+                  className="btn-cancelar"
                   onClick={handleCancelar}
                   disabled={saving}
                 >

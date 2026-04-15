@@ -82,21 +82,37 @@ class LeituraService {
             // Primeiro atualiza o status e progresso
             const livro = await this.buscarLeituraPorId(id);
             if (livro) {
-                await this.atualizarProgresso(id, {
+                const respostaProgresso = await this.atualizarProgresso(id, {
                     pagina_atual: livro.livro?.num_paginas || 0,
                     status: 'lido'
                 });
+                console.log('Resposta atualizarProgresso:', respostaProgresso);
             }
 
-            // Depois adiciona avaliação se fornecida
+            // Aguarda o backend processar a mudança de status
+            let leituraAtualizada = null;
+            let tentativas = 0;
+            while (tentativas < 5) {
+                await new Promise(resolve => setTimeout(resolve, 400)); // espera 400ms
+                leituraAtualizada = await this.buscarLeituraPorId(id);
+                if (leituraAtualizada?.status === 'lido') break;
+                tentativas++;
+            }
+
+            if (leituraAtualizada?.status !== 'lido') {
+                console.error('Status após atualizarProgresso:', leituraAtualizada?.status);
+                throw { erro: 'O status não foi atualizado para "lido". Tente novamente.' };
+            }
+
+            // Só avalia se o status realmente mudou para 'lido'
             if (avaliacao) {
                 return await this.avaliarLeitura(id, { avaliacao, resenha });
             }
 
-            return { mensagem: 'Leitura marcada como lida', leitura: livro };
+            return { mensagem: 'Leitura marcada como lida', leitura: leituraAtualizada };
         } catch (error: any) {
             console.error('Erro ao marcar como lido:', error);
-            throw error.response?.data || { erro: 'Erro ao marcar como lido' };
+            throw error.response?.data || error || { erro: 'Erro ao marcar como lido' };
         }
     }
 

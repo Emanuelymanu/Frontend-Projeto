@@ -6,7 +6,7 @@ import { leituraService } from "../services/leituraService";
 import { anotacaoService } from "../services/anotacaoService";
 import type { Anotacao } from "../types/anotacao";
 import type { Leitura, StatusLeitura } from "../types/leitura";
-
+import { showErrorToast, showSuccessToast, showWarningToast, showConfirmDialog } from "../utils/alertUtils";
 import "../css/leitura.css";
 // import { Tag as TagIcon } from "lucide-react"; // Removido pois não está em uso
 
@@ -26,6 +26,7 @@ export default function LeiturasPage() {
   const [statusNovo, setStatusNovo] = useState<StatusLeitura | "">("");
   const [avaliacao, setAvaliacao] = useState(0);
   const [resenha, setResenha] = useState("");
+  const [aguardandoAvaliacao, setAguardandoAvaliacao] = useState(false);
   const [paginaAtual, setPaginaAtual] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
 
@@ -50,7 +51,7 @@ export default function LeiturasPage() {
       const leiturasEmAndamento = await leituraService.listarLeiturasEmAndamento();
       setLeituras(leiturasEmAndamento);
     } catch (err: any) {
-      console.error("Erro ao carregar leituras:", err);
+      showErrorToast("Erro ao carregar leituras:");
       setError(err.erro || "Erro ao carregar leituras");
     } finally {
       setLoading(false);
@@ -81,7 +82,7 @@ export default function LeiturasPage() {
       const response = await anotacaoService.buscarPorPagina(id_leitura, pagina);
       setAnotacoes(response.anotacoes);
     } catch (err) {
-      console.error("Erro ao carregar anotações:", err);
+      showErrorToast("Erro ao carregar anotações");
       setAnotacoes([]);
     } finally {
       setCarregandoAnotacoes(false);
@@ -99,7 +100,7 @@ export default function LeiturasPage() {
   const handleCriarAnotacao = async () => {
     if (!livroSelecionado) return;
     if (!novaAnotacao.conteudo.trim()) {
-      alert("O conteúdo da anotação é obrigatório");
+      showWarningToast("O conteúdo da anotação é obrigatório");
       return;
     }
 
@@ -114,9 +115,9 @@ export default function LeiturasPage() {
       await carregarAnotacoes(livroSelecionado.id_leitura, paginaSelecionada);
       setNovaAnotacao({ titulo: "", conteudo: "" });
       setMostrarFormAnotacao(false);
-      alert("Anotação criada com sucesso!");
+      showSuccessToast("Anotação criada com sucesso!");
     } catch (err: any) {
-      alert(err.erro || "Erro ao criar anotação");
+      showErrorToast("Erro ao criar anotação");
     }
   };
 
@@ -134,14 +135,14 @@ export default function LeiturasPage() {
       }
 
       setEditandoAnotacao(null);
-      alert("Anotação atualizada com sucesso!");
+      showSuccessToast("Anotação atualizada com sucesso!");
     } catch (err: any) {
-      alert(err.erro || "Erro ao atualizar anotação");
+      showErrorToast("Erro ao atualizar anotação");
     }
   };
 
   const handleDeletarAnotacao = async (id: number) => {
-    if (!confirm("Tem certeza que deseja excluir esta anotação?")) return;
+    if (!await showConfirmDialog("", "Tem certeza que deseja excluir esta anotação?")) return;
 
     try {
       await anotacaoService.deletarAnotacao(id);
@@ -150,9 +151,9 @@ export default function LeiturasPage() {
         await carregarAnotacoes(livroSelecionado.id_leitura, paginaSelecionada);
       }
 
-      alert("Anotação excluída com sucesso!");
+      showSuccessToast("Anotação excluída com sucesso!");
     } catch (err: any) {
-      alert(err.erro || "Erro ao excluir anotação");
+      showErrorToast("Erro ao excluir anotação");
     }
   };
 
@@ -160,6 +161,11 @@ export default function LeiturasPage() {
     if (!livroSelecionado) return;
 
     try {
+      console.log({
+        pagina_atual: paginaAtual,
+        status: statusNovo as StatusLeitura || livroSelecionado.status
+      });
+
       await leituraService.atualizarProgresso(livroSelecionado.id_leitura, {
         pagina_atual: paginaAtual,
         status: statusNovo as StatusLeitura || livroSelecionado.status
@@ -167,28 +173,42 @@ export default function LeiturasPage() {
 
       await carregarLeituras();
       setLivroSelecionado(null);
-      alert("Progresso atualizado com sucesso!");
+      showSuccessToast("Progresso atualizado com sucesso!");
     } catch (err: any) {
-      alert(err.erro || "Erro ao atualizar progresso");
+      showErrorToast("Erro ao atualizar progresso");
     }
   };
 
-  const handleMarcarComoLido = async () => {
+  // Primeiro passo: só muda o status para 'lido'
+  const handleConfirmarLido = async () => {
     if (!livroSelecionado) return;
-
     try {
-      await leituraService.marcarComoLido(
-        livroSelecionado.id_leitura,
+      await leituraService.atualizarProgresso(livroSelecionado.id_leitura, {
+        pagina_atual: paginaAtual,
+        status: 'lido'
+      });
+      setAguardandoAvaliacao(true);
+      showSuccessToast("Status alterado para lido! Agora avalie o livro.");
+    } catch (err: any) {
+      showErrorToast("Erro ao marcar como lido");
+    }
+  };
+
+  // Segundo passo: avalia o livro
+  const handleAvaliarLivro = async () => {
+    if (!livroSelecionado) return;
+    try {
+      await leituraService.avaliarLeitura(livroSelecionado.id_leitura, {
         avaliacao,
         resenha
-      );
-
+      });
       await carregarLeituras();
       setLivroSelecionado(null);
       setStatusNovo("");
-      alert("Livro marcado como lido com sucesso!");
+      setAguardandoAvaliacao(false);
+      showSuccessToast("Livro avaliado com sucesso!");
     } catch (err: any) {
-      alert(err.erro || "Erro ao marcar como lido");
+      showErrorToast("Erro ao avaliar livro");
     }
   };
 
@@ -203,9 +223,9 @@ export default function LeiturasPage() {
 
       await carregarLeituras();
       setLivroSelecionado(null);
-      alert("Leitura abandonada!");
+      showSuccessToast("Leitura abandonada!");
     } catch (err: any) {
-      alert(err.erro || "Erro ao abandonar leitura");
+      showErrorToast("Erro ao abandonar leitura");
     }
   };
 
@@ -222,21 +242,7 @@ export default function LeiturasPage() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="biblioteca-container">
-        <Sidebar onLogout={() => console.log("logout")} active="leitura" />
-        <main className="main-content">
-          <div style={{ textAlign: "center", padding: "50px", color: "red" }}>
-            ❌ {error}
-            <button onClick={carregarLeituras} style={{ marginLeft: "10px" }}>
-              Tentar novamente
-            </button>
-          </div>
-        </main>
-      </div>
-    );
-  }
+
 
   return (
     <div className="biblioteca-container">
@@ -407,7 +413,15 @@ export default function LeiturasPage() {
                     </>
                   )}
 
-                  {statusNovo === "lido" && (
+                  {statusNovo === "lido" && !aguardandoAvaliacao && (
+                    <>
+                      <p>Tem certeza que deseja marcar este livro como lido?</p>
+                      <button onClick={handleConfirmarLido}>Sim, marcar como lido</button>
+                      <button onClick={() => setStatusNovo("")}>Cancelar</button>
+                    </>
+                  )}
+
+                  {statusNovo === "lido" && aguardandoAvaliacao && (
                     <>
                       <p>Avaliação (0-5):</p>
                       <div className="avaliacao-buttons">
@@ -432,7 +446,7 @@ export default function LeiturasPage() {
                         />
                       </div>
 
-                      <button onClick={handleMarcarComoLido}>Confirmar</button>
+                      <button onClick={handleAvaliarLivro}>Salvar Avaliação</button>
                     </>
                   )}
 

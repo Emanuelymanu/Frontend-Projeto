@@ -6,6 +6,11 @@ import LivroServiceUpload from "../services/livroServiceUpload";
 
 import { useNavigate, useLocation } from "react-router-dom";
 import type { Livro } from "../types/livro";
+import {
+    showWarningToast,
+    showSuccessAlert,
+    showErrorAlert,
+} from "../utils/alertUtils";
 
 export function EditarLivro() {
     const location = useLocation();
@@ -24,8 +29,6 @@ export function EditarLivro() {
     const [editora, setEditora] = useState(livro?.editora || "");
     const [capaFile, setCapaFile] = useState<File | null>(null);
     const [capaPreview, setCapaPreview] = useState(livro?.capa || "");
-    // Novos campos: status e avaliação
-    // status do livro: string (valor do select)
     const [status, setStatus] = useState("");
     const [avaliacao, setAvaliacao] = useState("0");
 
@@ -47,20 +50,20 @@ export function EditarLivro() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!titulo) {
-            alert("Título é obrigatório");
+            showWarningToast('Título é obrigatório');
             return;
         }
         if (!autor) {
-            alert("Autor é obrigatório");
+            showWarningToast('Autor é obrigatório');
             return;
         }
         if (!numPaginas) {
-            alert("Número de páginas é obrigatório");
+            showWarningToast('Numero de páginas é obrigatório');
             return;
         }
         setLoading(true);
         try {
-            // Mapeamento do valor do select para o tipo correto
+          
             let statusMapped: "Lido" | "Lendo" | "Quero Ler" | "Abandonado" | undefined = undefined;
             switch (status) {
                 case "lido":
@@ -98,10 +101,10 @@ export function EditarLivro() {
                 console.log('salvando alteração', dadosLivro)
                 await LivroService.editarSemCapa(livro.id_livro, dadosLivro);
             }
-            alert("Livro atualizado com sucesso!");
+            showSuccessAlert("Livro atualizado com sucesso!");
             navigate("/biblioteca");
         } catch (err: any) {
-            alert(err?.message || "Erro ao atualizar livro");
+            showErrorAlert("Erro ao atualizar livro");
         } finally {
             setLoading(false);
         }
@@ -118,7 +121,7 @@ export function EditarLivro() {
                 <h1>Editar Livro</h1>
                 <div className="form-wrapper">
                     <form onSubmit={handleSubmit} className="form-cadastro">
-                        {/* CAPA */}
+                      
                         <div className="input-group">
                             <label>Capa</label>
                             <input
@@ -128,7 +131,7 @@ export function EditarLivro() {
                                 disabled={loading}
                             />
                         </div>
-                        {/* PREVIEW */}
+                        
                         <div className="preview">
                             {capaPreview ? (
                                 <img src={capaPreview} alt="capa" />
@@ -136,7 +139,7 @@ export function EditarLivro() {
                                 <span>📖</span>
                             )}
                         </div>
-                        {/* TÍTULO */}
+                     
                         <div className="input-group">
                             <label>Título *</label>
                             <input
@@ -146,7 +149,7 @@ export function EditarLivro() {
                                 required
                             />
                         </div>
-                        {/* SUBTÍTULO */}
+                     
                         <div className="input-group">
                             <label>Subtítulo</label>
                             <input
@@ -155,7 +158,7 @@ export function EditarLivro() {
                                 onChange={(e) => setSubtitulo(e.target.value)}
                             />
                         </div>
-                        {/* AUTOR */}
+                       
                         <div className="input-group">
                             <label>Autor</label>
                             <input
@@ -164,7 +167,7 @@ export function EditarLivro() {
                                 onChange={(e) => setAutor(e.target.value)}
                             />
                         </div>
-                        {/* TIPO OBRA */}
+                        
                         <div className="input-group">
                             <label>Tipo de Obra</label>
                             <select
@@ -180,7 +183,7 @@ export function EditarLivro() {
                                 <option value="colecao">Coleção</option>
                             </select>
                         </div>
-                        {/* NOME SÉRIE */}
+                       
                         <div className="input-group">
                             <label>Nome da Série</label>
                             <input
@@ -189,7 +192,7 @@ export function EditarLivro() {
                                 onChange={(e) => setNomeSerie(e.target.value)}
                             />
                         </div>
-                        {/* ANO PUBLICAÇÃO */}
+                        
                         <div className="input-group">
                             <label>Ano de Publicação</label>
                             <input
@@ -199,7 +202,7 @@ export function EditarLivro() {
                                 min={0}
                             />
                         </div>
-                        {/* NÚMERO DE PÁGINAS */}
+                        
                         <div className="input-group">
                             <label>Número de Páginas</label>
                             <input
@@ -209,7 +212,7 @@ export function EditarLivro() {
                                 min={0}
                             />
                         </div>
-                        {/* GÊNERO */}
+                       
                         <div className="input-group">
                             <label>Gênero</label>
                             <input
@@ -218,7 +221,7 @@ export function EditarLivro() {
                                 onChange={(e) => setGenero(e.target.value)}
                             />
                         </div>
-                        {/* EDITORA */}
+                        
                         <div className="input-group">
                             <label>Editora</label>
                             <input
@@ -227,7 +230,7 @@ export function EditarLivro() {
                                 onChange={(e) => setEditora(e.target.value)}
                             />
                         </div>
-                        {/* STATUS */}
+                        
                         <div className="input-group">
                             <label>Status</label>
                             <select
@@ -242,7 +245,7 @@ export function EditarLivro() {
                                 <option value="abandonado">Abandonado</option>
                             </select>
                         </div>
-                        {/* AVALIAÇÃO */}
+                        
                         <div className="input-group">
                             <label>Avaliação</label>
                             <select

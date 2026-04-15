@@ -94,18 +94,7 @@ export function Cadastro() {
 
         <h1 className="login-title">Criar Conta</h1>
         <p className="login-subtitle">Cadastre-se para começar</p>
-        {error && (
-          <div style={{
-            backgroundColor: '#fee2e2',
-            color: '#dc2626',
-            padding: '10px',
-            borderRadius: '6px',
-            marginBottom: '15px',
-            fontSize: '14px'
-          }}>
-            ❌ {error}
-          </div>
-        )}
+       
 
         <form onSubmit={handleCadastro} className="login-form">
 

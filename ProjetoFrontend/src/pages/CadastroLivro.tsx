@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import LivroServiceUpload from "../services/livroServiceUpload";
 import { Sidebar } from "../components/sidebar";
 import "../css/CadastroLivro.css";
+import { showErrorAlert, showSuccessAlert, showWarningToast} from '../utils/alertUtils';
 
 
 export function CadastroLivro() {
@@ -23,19 +24,19 @@ export function CadastroLivro() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!titulo) {
-      alert("Título é obrigatório");
+      showWarningToast("Título é obrigatório");
       return;
     }
     if (!autor) {
-      alert("Título é obrigatório");
+      showWarningToast("Título é obrigatório");
       return;
     }
     if (!numPaginas) {
-      alert("Título é obrigatório");
+      showWarningToast("Título é obrigatório");
       return;
     }
     if (!capaFile) {
-      alert("Título é obrigatório");
+      showWarningToast("Título é obrigatório");
       return;
     }
     setLoading(true);
@@ -52,7 +53,7 @@ export function CadastroLivro() {
         editora,
       }, capaFile);
 
-      alert("Livro cadastrado com sucesso!");
+      showSuccessAlert("Livro cadastrado com sucesso!");
 
       setTitulo("");
       setSubtitulo("");
@@ -67,7 +68,7 @@ export function CadastroLivro() {
       setCapaFile(null);
       navigate("/Biblioteca");
     } catch (err: any) {
-      alert(err?.message || "Erro ao cadastrar livro");
+      showErrorAlert("Erro ao cadastrar livro");
     }
   };
   const handleCapaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
