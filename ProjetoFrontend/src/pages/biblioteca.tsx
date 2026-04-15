@@ -6,6 +6,7 @@ import { LivroCard } from "../components/LivroCard";
 import "../css/biblioteca.css";
 import LivroService from "../services/livroService";
 import type { Livro } from "../types/livro";
+import { showConfirmDialog, showSuccessToast} from '../utils/alertUtils';
 
 
 export function Biblioteca() {
@@ -63,16 +64,21 @@ export function Biblioteca() {
   }
 
   const excluirLivro = async (id: number): Promise<void> => {
-    if (!confirm("Tem certeza que deseja excluir este livro?")) return;
+     const confirmado = await showConfirmDialog(
+    ' Confirmar exclusão',
+    'Tem certeza que deseja excluir este livro? Esta ação não pode ser desfeita.',
+    'Sim, excluir',
+    'Cancelar'
+  );
+  if(!confirmado) return;
 
     try {
-      await LivroService.deletar(id);
+      const response = await LivroService.deletar(id);
+      showSuccessToast('Livro excluído com sucesso!');
       await carregarLivros();
       setLivroSelecionado(null);
     } catch (err) {
-      console.error("Erro ao excluir:", err);
-      const apiError = err as { message?: string };
-      alert(apiError.message || "Erro ao excluir livro");
+      console.error( err);
     }
   };
 

@@ -3,14 +3,15 @@ import { Link, useNavigate } from 'react-router-dom';
 // Aqui nós avisamos o React para carregar os estilos que vamos criar no passo 2
 import '../css/login.css';
 import { authService } from '../services/authService';
-import type { ApiError } from '../types/auth';
+
+import { showSuccessToast } from '../utils/alertUtils';
 
 export function Login() {
   const navegate = useNavigate();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
-  const [, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async (evento: React.FormEvent) => {
     evento.preventDefault();
@@ -19,13 +20,13 @@ export function Login() {
 
     try {
       const response = await authService.login({ email, senha });
-      console.log('Login realizado com sucesso', response);
+      showSuccessToast('Login realizado com sucesso!', response);
       navegate('/home');
-    } catch (error) {
-      const apiError = error as ApiError;
-      setError(apiError.mensagem || "Erro ao fazer login")
-      console.error("Erro no login", error);
-      navegate('/login');
+    } catch (erro: any) {
+      if (erro?.response?.status === 401) {
+        setError('Email ou senha inválidos. Tente novamente.');
+      }
+      // Removido navegate('/login') para evitar loop
     } finally {
       setLoading(false);
     }
@@ -48,16 +49,18 @@ export function Login() {
 
         <h1 className="login-title">Minha Biblioteca</h1>
         <p className="login-subtitle">Entre para gerenciar seus livros</p>
-        {/* <div className='error-mensagem' style={{
-          backgroundColor: '#fee2e2',
-          color: '#dc2626',
-          padding: '10px',
-          borderRadius: '6px',
-          marginBottom: '15px',
-          fontSize: '14px'
-        }}>
-          {error}
-        </div> */}
+        {typeof error === 'string' && error && (
+          <div className='error-mensagem' style={{
+            backgroundColor: '#fee2e2',
+            color: '#dc2626',
+            padding: '10px',
+            borderRadius: '6px',
+            marginBottom: '15px',
+            fontSize: '14px'
+          }}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleLogin} className="login-form">
 
