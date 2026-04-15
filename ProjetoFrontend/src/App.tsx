@@ -4,13 +4,14 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 // 2. Importamos as três páginas que já criou
 import { Login } from './pages/login';
 import { Cadastro } from './pages/cadastro';
-import { Home } from './pages/home'; // <-- Adicionámos a importação da Home aqui!
+import  Home  from './pages/home'; // <-- Adicionámos a importação da Home aqui!
 import { Biblioteca } from './pages/biblioteca';
 import { EditarLivro } from './pages/EditarLivro';
 import { Dashboard } from './pages/dashboard';
 import LeiturasPage from "./pages/leituras";
 import { MeuPerfil } from "./pages/MeuPerfil";
 import { CadastroLivro } from "./pages/CadastroLivro";
+import { AnotacoesResenhas } from "./pages/AnotacoesResenhas";
 
 import { authService } from './services/authService';
 
@@ -36,6 +37,7 @@ function App() {
         <Route path="/CadastroLivro" element={<CadastroLivro />} />
         <Route path="/MeuPerfil" element={<MeuPerfil />} />
         <Route path="/EditarLivro" element={<EditarLivro />} />
+        <Route path="/anotacoes-resenhas" element={<AnotacoesResenhas />} />
 
 
         <Route

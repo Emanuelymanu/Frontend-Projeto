@@ -1,13 +1,25 @@
+
+
 import api from './api';
-import type  { 
-  
-  CriarAnotacaoDTO, 
+import type {
+  CriarAnotacaoDTO,
   AtualizarAnotacaoDTO,
   AnotacaoResponse,
-  AnotacoesPorPaginaResponse 
+  AnotacoesPorPaginaResponse,
+  Anotacao
 } from '../types/anotacao';
 
 class AnotacaoService {
+  // Buscar todas as anotações de uma leitura
+  async buscarTodasPorLeitura(id_leitura: number): Promise<Anotacao[]> {
+    try {
+      const response = await api.get<{ anotacoes: Anotacao[] }>(`/anotacoes/leitura/${id_leitura}`);
+      return response.data.anotacoes;
+    } catch (error: any) {
+      console.error('Erro ao buscar anotações:', error);
+      return [];
+    }
+  }
   // Criar uma nova anotação
   async criarAnotacao(dados: CriarAnotacaoDTO): Promise<AnotacaoResponse> {
     try {
@@ -28,6 +40,35 @@ class AnotacaoService {
       return response.data;
     } catch (error: any) {
       console.error('Erro ao buscar anotações:', error);
+      throw error.response?.data || { erro: 'Erro ao buscar anotações' };
+    }
+  }
+
+   async buscarTodasPorIdLeitura(id_leitura: number): Promise<Anotacao[]> {
+    try {
+      
+      
+      const todasAnotacoes: Anotacao[] = [];
+      let pagina = 1;
+      let temMais = true;
+      
+      while (temMais) {
+        try {
+          const response = await this.buscarPorPagina(id_leitura, pagina);
+          if (response.anotacoes && response.anotacoes.length > 0) {
+            todasAnotacoes.push(...response.anotacoes);
+            pagina++;
+          } else {
+            temMais = false;
+          }
+        } catch {
+          temMais = false;
+        }
+      }
+      
+      return todasAnotacoes;
+    } catch (error: any) {
+      console.error('Erro ao buscar todas anotações:', error);
       throw error.response?.data || { erro: 'Erro ao buscar anotações' };
     }
   }

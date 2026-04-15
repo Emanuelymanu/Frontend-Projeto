@@ -32,11 +32,33 @@ export function Biblioteca() {
   const carregarLivros = async (): Promise<void> => {
     try {
       const data = await LivroService.listar();
-      console.log('Livros recebidos da API:', data);
+
+      // Função para mapear status do backend para o frontend
+      const mapStatus = (status: string | undefined): "Lido" | "Lendo" | "Quero Ler" | "Não lido" | undefined => {
+        switch (status) {
+          case "lido": return "Lido";
+          case "lendo": return "Lendo";
+          case "quero_ler": return "Quero Ler";
+          case "nao_lido": return "Não lido";
+          default: return undefined;
+        }
+      };
+
+      data.forEach((i) => {
+        if (i.leituras && Array.isArray(i.leituras) && i.leituras.length > 0) {
+          const primeiraLeitura = i.leituras[0];
+          i.status_leitura = mapStatus(primeiraLeitura?.status);
+          i.avaliacao = primeiraLeitura?.avaliacao;
+        } else {
+          i.status_leitura = undefined;
+          i.avaliacao = undefined;
+        }
+      });
+
       setLivros(data);
-      setLivrosFiltrados(data); // Mostra todos ao carregar
+      setLivrosFiltrados(data);
     } catch (err) {
-      // setError("Erro ao carregar livros");
+
     }
   }
 

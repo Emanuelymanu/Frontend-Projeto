@@ -1,4 +1,3 @@
-// frontend/src/components/LeiturasCard.tsx
 import { useEffect, useState } from "react";
 import { LivroCard } from "./LivroCard";
 import { leituraService } from "../services/leituraService";

@@ -21,7 +21,7 @@ export function Sidebar({ onLogout, active }: SidebarProps) {
 
       <div className="sidebar-header">
         <BookOpen size={28} color="#1d4ed8" />
-        <h2>Biblioteca</h2>
+        <h2>Diário Digital</h2>
       </div>
 
       <nav className="sidebar-menu">
@@ -41,8 +41,13 @@ export function Sidebar({ onLogout, active }: SidebarProps) {
           <BookPlus size={20} /> Cadastrar
         </Link>
 
+
         <Link to="/leitura" className={`menu-item ${active === "leitura" ? "active" : ""}`}>
           <BookOpen size={20} /> Leituras
+        </Link>
+
+        <Link to="/anotacoes-resenhas" className={`menu-item ${active === "anotacoes-resenhas" ? "active" : ""}`}>
+          <BookOpen size={20} /> Anotações & Resenhas
         </Link>
 
         <Link to="/MeuPerfil" className={`menu-item ${active === "MeuPerfil" ? "active" : ""}`}>

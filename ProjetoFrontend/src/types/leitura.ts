@@ -1,26 +1,29 @@
 export type StatusLeitura = 'nao_lido' | 'quero_ler' | 'lendo' | 'lido' | 'abandonado' | 'relendo';
 
 export interface LivroInfo {
-    id_livro: number;
-    titulo: string;
-    autor: string;
-    genero?: string;
-    num_paginas: number;
-    capa?: string;
+  id_livro: number;
+  titulo: string;
+  autor: string;
+  genero?: string;
+  num_paginas: number;
+  capa?: string;
 }
 
+import type { Tag } from "./tags";
+
 export interface Leitura {
-    id_leitura: number;
-    id_usuario: number;
-    id_livro: number;
-    status: StatusLeitura;
-    data_inicio: string;
-    data_conclusao?: string;
-    avaliacao?: number;
-    resenha?: string;
-    pagina_atual: number;
-    vezes_lido: number;
-    livro?: LivroInfo;
+  id_leitura: number;
+  id_usuario: number;
+  id_livro: number;
+  status: StatusLeitura;
+  data_inicio: string;
+  data_conclusao?: string;
+  avaliacao?: number;
+  resenha?: string;
+  pagina_atual: number;
+  vezes_lido: number;
+  livro?: LivroInfo;
+  tags?: Tag[];
 }
 export interface CriarLeituraDTO {
   id_livro: number;

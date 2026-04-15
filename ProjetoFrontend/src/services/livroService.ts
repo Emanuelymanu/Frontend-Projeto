@@ -10,7 +10,6 @@ class LivroService {
     async listar(): Promise<Livro[]> {
         try {
             const response = await api.get('/livros');
-            // Corrigido para pegar do campo correto do backend
             return Array.isArray(response.data.livros) ? response.data.livros : [];
         } catch (error) {
             const axiosError = error as AxiosError;
@@ -63,6 +62,17 @@ class LivroService {
             throw axiosError.response?.data || { message: 'Erro ao deletar livro' };
         }
     }
+
+    async listarTopAvaliados(limit: number = 5): Promise<Livro[]> {
+        try {
+            const response = await api.get(`/livros/top-avaliados?limit=${limit}`);
+            return response.data.livros || response.data || [];
+        } catch (error: any) {
+            console.error('Erro ao buscar top avaliados:', error);
+            return []; // Retorna array vazio em caso de erro
+        }
+    }
 }
+
 
 export default new LivroService();

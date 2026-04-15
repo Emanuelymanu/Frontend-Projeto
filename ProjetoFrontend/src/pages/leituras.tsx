@@ -6,10 +6,20 @@ import { leituraService } from "../services/leituraService";
 import { anotacaoService } from "../services/anotacaoService";
 import type { Anotacao } from "../types/anotacao";
 import type { Leitura, StatusLeitura } from "../types/leitura";
+
 import "../css/leitura.css";
+// import { Tag as TagIcon } from "lucide-react"; // Removido pois não está em uso
+
+
+import { TagsManager } from "../components/TagsManager";
+import { tagService } from "../services/tagsService";
+import type { Tag } from "../types/tags";
+
 
 export default function LeiturasPage() {
   const [leituras, setLeituras] = useState<Leitura[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [mostrarModalTags, setMostrarModalTags] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [livroSelecionado, setLivroSelecionado] = useState<Leitura | null>(null);
@@ -26,9 +36,9 @@ export default function LeiturasPage() {
   const [editandoAnotacao, setEditandoAnotacao] = useState<Anotacao | null>(null);
   const [mostrarFormAnotacao, setMostrarFormAnotacao] = useState(false);
   const [carregandoAnotacoes, setCarregandoAnotacoes] = useState(false);
-  const [abaAtiva, setAbaAtiva] = useState<"progresso" | "anotacoes">("progresso");
+  const [abaAtiva, setAbaAtiva] = useState<"progresso" | "anotacoes" | "tags">("progresso");
 
-  // Carregar leituras em andamento
+
   useEffect(() => {
     carregarLeituras();
   }, []);
@@ -47,6 +57,8 @@ export default function LeiturasPage() {
     }
   };
 
+
+
   const handleAbrirModal = async (leitura: Leitura) => {
     setLivroSelecionado(leitura);
     setPaginaAtual(leitura.pagina_atual || 0);
@@ -58,6 +70,10 @@ export default function LeiturasPage() {
     setAbaAtiva("progresso");
     await carregarAnotacoes(leitura.id_leitura, leitura.pagina_atual || 1);
   };
+
+
+
+
 
   const carregarAnotacoes = async (id_leitura: number, pagina: number) => {
     setCarregandoAnotacoes(true);
@@ -232,6 +248,24 @@ export default function LeiturasPage() {
           <p>{leituras.length} livro(s) em leitura</p>
         </header>
 
+
+        {/* SEÇÃO DE TAGS */}
+        <div style={{ margin: '24px 0' }}>
+          <button
+            className="btn-nova-tag"
+            style={{ padding: '8px 16px', borderRadius: 6, background: '#3b82f6', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 500 }}
+            onClick={() => setMostrarModalTags(true)}
+          >
+            🏷️ Gerenciar Tags
+          </button>
+        </div>
+        <TagsManager
+          tags={tags}
+          setTags={setTags}
+          mostrarModalTags={mostrarModalTags}
+          setMostrarModalTags={setMostrarModalTags}
+        />
+
         <div className="books-grid">
           {leituras.length === 0 ? (
             <p>Nenhum livro em leitura. Comece uma nova leitura na biblioteca!</p>
@@ -266,6 +300,56 @@ export default function LeiturasPage() {
                 <p><strong>Autor:</strong> {livroSelecionado.livro?.autor}</p>
               </div>
 
+              {/* BLOCO DE TAGS VINCULADAS */}
+              <div style={{ margin: '16px 0' }}>
+                <h4>Tags:</h4>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {tags.length === 0 && <span style={{ color: '#888' }}>Nenhuma tag cadastrada.</span>}
+                  {tags.map(tag => {
+                    const vinculada = livroSelecionado?.tags?.some((t: Tag) => t.id_tag === tag.id_tag);
+                    return (
+                      <button
+                        key={tag.id_tag}
+                        style={{
+                          background: vinculada ? tag.cor : '#f3f4f6',
+                          color: vinculada ? '#fff' : '#222',
+                          border: 'none',
+                          borderRadius: 6,
+                          padding: '4px 12px',
+                          cursor: 'pointer',
+                          fontWeight: 500,
+                          opacity: vinculada ? 1 : 0.7
+                        }}
+                        onClick={async () => {
+                          if (!livroSelecionado) return;
+                          try {
+                            if (vinculada) {
+                              await tagService.removerTag(tag.id_tag, livroSelecionado.id_leitura);
+                              // Remover visualmente
+                              setLivroSelecionado({
+                                ...livroSelecionado,
+                                tags: (livroSelecionado.tags || []).filter((t: Tag) => t.id_tag !== tag.id_tag)
+                              });
+                            } else {
+                              await tagService.vincularTag(tag.id_tag, livroSelecionado.id_leitura);
+                              // Adicionar visualmente
+                              setLivroSelecionado({
+                                ...livroSelecionado,
+                                tags: [...(livroSelecionado.tags || []), tag]
+                              });
+                            }
+                          } catch (err: any) {
+                            alert(err.erro || 'Erro ao atualizar vínculo da tag');
+                          }
+                        }}
+                        title={vinculada ? 'Desvincular da leitura' : 'Vincular à leitura'}
+                      >
+                        {tag.nome}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
               {/* ABAS */}
               <div className="tabs">
                 <button
@@ -468,4 +552,6 @@ export default function LeiturasPage() {
       </main>
     </div>
   );
+
+
 }
