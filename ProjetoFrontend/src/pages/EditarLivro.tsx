@@ -1,4 +1,5 @@
 import { useState } from "react";
+import type { StatusLeitura } from "../types/leitura";
 import { Sidebar } from "../components/sidebar";
 import "../css/CadastroLivro.css";
 import LivroService from "../services/livroService";
@@ -30,12 +31,13 @@ export function EditarLivro() {
     const [editora, setEditora] = useState(livro?.editora || "");
     const [capaFile, setCapaFile] = useState<File | null>(null);
     const [capaPreview, setCapaPreview] = useState(livro?.capa || "");
-    const [status, setStatus] = useState("");
+    const [status, setStatus] = useState<StatusLeitura | "">("");
     const [avaliacao, setAvaliacao] = useState("0");
+
     const handleLogout = () => {
-  localStorage.removeItem("token");
-  window.location.href = "/login";
-};
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+    };
 
     const handleCapaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -68,7 +70,7 @@ export function EditarLivro() {
         }
         setLoading(true);
         try {
-            // Atualiza dados do livro
+
             const dadosLivro = {
                 titulo,
                 subtitulo,
@@ -87,10 +89,10 @@ export function EditarLivro() {
                 await LivroService.editarSemCapa(livro.id_livro, dadosLivro);
             }
 
-            // Atualiza status da leitura associada, se existir
+
             if (livro.leituras && livro.leituras.length > 0 && status) {
                 const leitura = livro.leituras[0];
-                await leituraService.atualizarProgresso(leitura.id_leitura, { status });
+                await leituraService.atualizarProgresso(leitura.id_leitura, { status, pagina_atual: leitura.pagina_atual });
             }
 
             showSuccessAlert("Livro atualizado com sucesso!");
@@ -227,7 +229,7 @@ export function EditarLivro() {
                             <label>Status</label>
                             <select
                                 value={status}
-                                onChange={e => setStatus(e.target.value)}
+                                onChange={e => setStatus(e.target.value as StatusLeitura)}
                                 disabled={loading}
                             >
                                 <option value="">Selecione...</option>

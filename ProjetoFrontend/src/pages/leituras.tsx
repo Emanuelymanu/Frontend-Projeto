@@ -1,4 +1,3 @@
-// frontend/src/pages/Leitura.tsx
 import { useState, useEffect } from "react";
 import { Sidebar } from "../components/sidebar";
 import { LivroCard } from "../components/LivroCard";
@@ -9,7 +8,6 @@ import type { Leitura, StatusLeitura } from "../types/leitura";
 import { showErrorToast, showSuccessToast, showWarningToast, showConfirmDialog } from "../utils/alertUtils";
 import "../css/tags.css";
 import "../css/leitura.css";
-// import { Tag as TagIcon } from "lucide-react"; // Removido pois não está em uso
 
 
 import { TagsManager } from "../components/TagsManager";
@@ -22,7 +20,7 @@ export default function LeiturasPage() {
   const [tags, setTags] = useState<Tag[]>([]);
   const [mostrarModalTags, setMostrarModalTags] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  // const [error, setError] = useState(""); // Removido pois não está sendo utilizado
   const [livroSelecionado, setLivroSelecionado] = useState<Leitura | null>(null);
   const [statusNovo, setStatusNovo] = useState<StatusLeitura | "">("");
   const [avaliacao, setAvaliacao] = useState(0);
@@ -31,7 +29,7 @@ export default function LeiturasPage() {
   const [paginaAtual, setPaginaAtual] = useState(0);
   const [totalPaginas, setTotalPaginas] = useState(0);
 
-  // Estados para anotações
+
   const [anotacoes, setAnotacoes] = useState<Anotacao[]>([]);
   const [paginaSelecionada, setPaginaSelecionada] = useState<number>(1);
   const [novaAnotacao, setNovaAnotacao] = useState({ titulo: "", conteudo: "" });
@@ -48,9 +46,9 @@ export default function LeiturasPage() {
   }, []);
 
   const handleLogout = () => {
-  localStorage.removeItem("token");
-  window.location.href = "/login";
-};
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
 
   const carregarTags = async () => {
     try {
@@ -63,13 +61,13 @@ export default function LeiturasPage() {
 
   const carregarLeituras = async () => {
     setLoading(true);
-    setError("");
+
     try {
       const leiturasEmAndamento = await leituraService.listarLeiturasEmAndamento();
       setLeituras(leiturasEmAndamento);
     } catch (err: any) {
       showErrorToast("Erro ao carregar leituras:");
-      setError(err.erro || "Erro ao carregar leituras");
+
     } finally {
       setLoading(false);
     }
@@ -196,7 +194,7 @@ export default function LeiturasPage() {
     }
   };
 
-  // Primeiro passo: só muda o status para 'lido'
+
   const handleConfirmarLido = async () => {
     if (!livroSelecionado) return;
     try {
@@ -211,7 +209,7 @@ export default function LeiturasPage() {
     }
   };
 
-  // Segundo passo: avalia o livro
+
   const handleAvaliarLivro = async () => {
     if (!livroSelecionado) return;
     try {
@@ -272,14 +270,14 @@ export default function LeiturasPage() {
         </header>
 
 
-        {/* SEÇÃO DE TAGS */}
 
-  <button
-    className="btn-nova-tag"
-    onClick={() => setMostrarModalTags(true)}
-  >
-     Gerenciar Tags
-  </button>
+
+        <button
+          className="btn-nova-tag"
+          onClick={() => setMostrarModalTags(true)}
+        >
+          Gerenciar Tags
+        </button>
 
         <TagsManager
           tags={tags}
@@ -312,42 +310,42 @@ export default function LeiturasPage() {
           )}
         </div>
 
-        {/* MODAL DE LEITURA COM ABAS */}
+
         {livroSelecionado && (
           <div className="modal-overlay" onClick={() => setLivroSelecionado(null)}>
             <div className="modal-content-large" onClick={(e) => e.stopPropagation()}>
 
-              {/* CABEÇALHO */}
+
               <div className="modal-header">
                 <h2>{livroSelecionado.livro?.titulo}</h2>
                 <p><strong>Autor:</strong> {livroSelecionado.livro?.autor}</p>
               </div>
 
-              {/* BLOCO DE TAGS VINCULADAS */}
+
               <div className="tags-vinculadas-container">
-  <h4>Tags:</h4>
-  <div className="tags-vinculadas-lista">
+                <h4>Tags:</h4>
+                <div className="tags-vinculadas-lista">
                   {tags.length === 0 && <span style={{ color: '#888' }}>Nenhuma tag cadastrada.</span>}
                   {tags.map(tag => {
                     const vinculada = livroSelecionado?.tags?.some((t: Tag) => t.id_tag === tag.id_tag);
                     return (
                       <button
-  key={tag.id_tag}
-  className={`tag-btn ${vinculada ? "ativa" : ""}`}
-  style={{ backgroundColor: vinculada ? tag.cor : undefined }}
+                        key={tag.id_tag}
+                        className={`tag-btn ${vinculada ? "ativa" : ""}`}
+                        style={{ backgroundColor: vinculada ? tag.cor : undefined }}
                         onClick={async () => {
                           if (!livroSelecionado) return;
                           try {
                             if (vinculada) {
                               await tagService.removerTag(tag.id_tag, livroSelecionado.id_leitura);
-                              // Remover visualmente
+
                               setLivroSelecionado({
                                 ...livroSelecionado,
                                 tags: (livroSelecionado.tags || []).filter((t: Tag) => t.id_tag !== tag.id_tag)
                               });
                             } else {
                               await tagService.vincularTag(tag.id_tag, livroSelecionado.id_leitura);
-                              // Adicionar visualmente
+
                               setLivroSelecionado({
                                 ...livroSelecionado,
                                 tags: [...(livroSelecionado.tags || []), tag]
@@ -365,7 +363,7 @@ export default function LeiturasPage() {
                   })}
                 </div>
               </div>
-              {/* ABAS */}
+
               <div className="tabs">
                 <button
                   className={abaAtiva === "progresso" ? "tab-active" : "tab"}
@@ -381,7 +379,7 @@ export default function LeiturasPage() {
                 </button>
               </div>
 
-              {/* CONTEÚDO - PROGRESSO */}
+
               {abaAtiva === "progresso" && (
                 <div className="tab-content">
                   <div className="progress-info">
@@ -465,7 +463,7 @@ export default function LeiturasPage() {
                 </div>
               )}
 
-              {/* CONTEÚDO - ANOTAÇÕES */}
+
               {abaAtiva === "anotacoes" && (
                 <div className="tab-content">
                   <div className="pagina-navegacao">

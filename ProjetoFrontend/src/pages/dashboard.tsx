@@ -1,4 +1,3 @@
-// frontend/src/pages/Dashboard.tsx
 import { useEffect, useState } from "react";
 import { Sidebar } from "../components/sidebar";
 import {
@@ -85,7 +84,7 @@ export function Dashboard() {
           <p>Visão geral da sua biblioteca</p>
         </header>
 
-        {/* CARDS PRINCIPAIS */}
+       
         <div className="dashboard-cards">
           <div className="card">
             <div>
@@ -120,7 +119,7 @@ export function Dashboard() {
           </div>
         </div>
 
-        {/* SEGUNDA LINHA DE CARDS */}
+        
         <div className="dashboard-cards-secondary">
           <div className="card-secondary">
             <div className="card-icon">
@@ -156,7 +155,7 @@ export function Dashboard() {
           </div>
         </div>
 
-        {/* GÊNEROS MAIS LIDOS */}
+        
         <div className="filter-card">
           <h2> Gêneros Mais Lidos</h2>
           {generos_mais_lidos.length === 0 ? (
@@ -183,7 +182,7 @@ export function Dashboard() {
           )}
         </div>
 
-        {/* PROGRESSO DE LEITURA */}
+      
         <div className="progress-card">
           <h2> Progresso de Leitura</h2>
           <div className="progress-stats">

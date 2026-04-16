@@ -12,10 +12,10 @@ export interface Livro {
     editora?: string;
     genero?: string;
     capa?: string;
-    status_leitura?: ' Abandonado'|'Lido' | 'Lendo' | 'Quero Ler' | 'Não lido';
+    status_leitura?: 'Abandonado' | 'Lido' | 'Lendo' | 'Quero Ler' | 'Não lido' | 'Relendo';
     avaliacao?: number;
     leituras?: Leitura[],
-    avaliacao_media?: number; 
+    avaliacao_media?: number;
     created_at?: string;
     updated_at?: string;
     usuarioId?: number;
@@ -42,7 +42,7 @@ export interface LivroInput {
     avaliacao: number;
     capa: string;
 
-    status: 'Lido' | 'Lendo' | 'Quero Ler' | 'Abandonado'| 'Não lido';
+    status: 'Lido' | 'Lendo' | 'Quero Ler' | 'Abandonado' | 'Não lido';
 }
 
 export interface LivroResponse {

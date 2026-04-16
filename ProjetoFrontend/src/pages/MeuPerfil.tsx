@@ -3,15 +3,14 @@ import { Sidebar } from "../components/sidebar";
 import { perfilService } from "../services/perfilServece";
 import { authService } from "../services/authService";
 import type { UsuarioPerfil } from "../types/perfil";
-import { showErrorToast, showSuccessToast,showWarningToast } from "../utils/alertUtils";
+import { showErrorToast, showSuccessToast, showWarningToast } from "../utils/alertUtils";
 import "../css/MeuPerfil.css";
 
 export function MeuPerfil() {
   const [editando, setEditando] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+ 
 
 
   const [perfil, setPerfil] = useState<UsuarioPerfil | null>(null);
@@ -19,14 +18,14 @@ export function MeuPerfil() {
 
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
-  const [senhaAtual, setSenhaAtual] = useState("");
+  const [senhaAtual, setSenhaAtual] = useState(""); 
   const [novaSenha, setNovaSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
 
   const handleLogout = () => {
-  localStorage.removeItem("token");
-  window.location.href = "/login";
-};
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
 
 
   useEffect(() => {
@@ -35,7 +34,7 @@ export function MeuPerfil() {
 
   const carregarPerfil = async () => {
     setLoading(true);
-    setError("");
+
     try {
       const data = await perfilService.buscarPerfil();
       setPerfil(data);
@@ -43,7 +42,7 @@ export function MeuPerfil() {
       setCpf(formatarCPF(data.cpf));
     } catch (err: any) {
       showErrorToast("Erro ao carregar perfil:");
-      setError(err.erro || "Erro ao carregar perfil");
+
     } finally {
       setLoading(false);
     }
@@ -72,7 +71,7 @@ export function MeuPerfil() {
 
   const handleSalvar = async () => {
     showWarningToast("");
-    setSuccess("");
+
 
     if (!nome.trim()) {
       showWarningToast("O nome é obrigatório");
@@ -156,12 +155,12 @@ export function MeuPerfil() {
 
       setTimeout(() => {
         setEditando(false);
-        setSuccess("");
+
       }, 2000);
 
     } catch (err: any) {
       showErrorToast("Erro ao salvar");
-      setError(err.erro || "Erro ao salvar alterações");
+
     } finally {
       setSaving(false);
     }
@@ -176,8 +175,6 @@ export function MeuPerfil() {
     setSenhaAtual("");
     setNovaSenha("");
     setConfirmarSenha("");
-    setError("");
-    setSuccess("");
     setEditando(false);
   };
 
@@ -237,7 +234,7 @@ export function MeuPerfil() {
             <div className="perfil-edicao">
               <h2>Editar Perfil</h2>
 
-              
+
 
               <div className="form-group">
                 <label>Nome completo *</label>

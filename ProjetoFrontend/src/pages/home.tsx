@@ -30,25 +30,8 @@ function Home() {
 
   const carregarTopAvaliados = async () => {
     try {
-      const livros = await LivroService.listar();
-
-      // 🔥 PEGA SÓ >= 4
-      const filtrados = livros
-        .map((l: any) => {
-          if (l.leituras && l.leituras.length > 0) {
-            const leitura = l.leituras[0];
-            return {
-              ...l,
-              avaliacao: leitura?.avaliacao || 0
-            };
-          }
-          return { ...l, avaliacao: 0 };
-        })
-        .filter((l: any) => l.avaliacao >= 4)
-        .sort((a: any, b: any) => b.avaliacao - a.avaliacao)
-        .slice(0, 10);
-
-      setTopAvaliados(filtrados);
+      const livros = await LivroService.listarTopAvaliados(10);
+      setTopAvaliados(livros);
     } catch (error) {
       console.error("Erro ao carregar top avaliados:", error);
       setTopAvaliados([]);

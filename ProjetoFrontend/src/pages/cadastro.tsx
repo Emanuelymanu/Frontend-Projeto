@@ -1,12 +1,11 @@
 import { useState } from 'react';
-
 import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
-// Aqui importamos o MESMO arquivo CSS do login, pois o estilo é o mesmo!
 import '../css/login.css';
+import { showErrorToast, showSuccessToast } from '../utils/alertUtils';
 
 export function Cadastro() {
-  // Criando a memória para todos os campos do seu formulário
+
   const navigate = useNavigate();
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
@@ -14,39 +13,39 @@ export function Cadastro() {
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null); // Removido pois não está sendo utilizado
 
   const handleCadastro = async (evento: React.FormEvent) => {
     evento.preventDefault();
 
-    // Uma validação simples no Front-end: verificar se as senhas são iguais
+
     if (senha !== confirmarSenha) {
-      setError('As senhas não conferem!');
-      return; // O return faz a função parar aqui se der erro
+      showErrorToast('As senhas não conferem!');
+      return;
     }
 
     const cpfNumerico = cpf.replace(/\D/g, '');
     if (cpfNumerico.length !== 11) {
-      setError('CPF inválido! Digite 11 números');
+      showErrorToast('CPF inválido! Digite 11 números');
       return;
     }
 
 
     setLoading(true);
-    setError('');
+   
 
 
     try {
-      const response = await authService.cadastro({
+      await authService.cadastro({
         nome,
         email,
         cpf: cpfNumerico,
         senha
       });
-      console.log("Cadastro realizado com sucesso, faça login para continuar", response)
+      showSuccessToast("Cadastro realizado com sucesso, faça login para continuar");
       navigate('/login');
     } catch (error: any) {
-      // Try to extract backend error message
+
       let errorMensagem = "Erro ao cadastrar";
       if (error?.mensagem) {
         errorMensagem = error.mensagem;
@@ -55,9 +54,9 @@ export function Cadastro() {
       } else if (error?.message) {
         errorMensagem = error.message;
       }
-      setError(errorMensagem);
-      // Log full error for debugging
-      console.error("Erro no cadastro", error);
+    
+
+      showErrorToast("Erro no cadastro");
     }
   };
 
@@ -79,13 +78,13 @@ export function Cadastro() {
   };
 
   return (
-    // Reutilizamos a classe 'login-container' para ter o mesmo fundo
+
     <div className="login-container">
 
-      {/* Reutilizamos a classe 'login-card' para o quadrado branco */}
+
       <div className="login-card">
 
-        {/* Mesmo ícone de Livro */}
+
         <div className="icon-container">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
@@ -94,7 +93,7 @@ export function Cadastro() {
 
         <h1 className="login-title">Criar Conta</h1>
         <p className="login-subtitle">Cadastre-se para começar</p>
-       
+
 
         <form onSubmit={handleCadastro} className="login-form">
 

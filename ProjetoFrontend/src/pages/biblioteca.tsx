@@ -37,7 +37,7 @@ export function Biblioteca() {
     try {
       const data = await LivroService.listar();
 
-      // Função para mapear status do backend para o frontend
+      
       const mapStatus = (status: string | undefined): "Lido" | "Lendo" | "Quero Ler" | "Não lido" | "Abandonado" | "Relendo" | undefined => {
         switch (status) {
           case "lido": return "Lido";
@@ -78,7 +78,7 @@ export function Biblioteca() {
     if (!confirmado) return;
 
     try {
-      const response = await LivroService.deletar(id);
+      await LivroService.deletar(id);
       showSuccessToast('Livro excluído com sucesso!');
       await carregarLivros();
       setLivroSelecionado(null);
