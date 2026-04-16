@@ -56,6 +56,10 @@ export function Filters(props: any) {
               <option value="todos">Todos</option>
               <option value="Lido">Lido</option>
               <option value="Lendo">Lendo</option>
+              <option value="Quero Ler">Quero Ler</option>
+              <option value="Não lido">Não lido</option>
+              <option value="Abandonado">Abandonado</option>
+              <option value="Relendo">Relendo</option>
             </select>
           </div>
 

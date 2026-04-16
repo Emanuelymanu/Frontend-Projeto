@@ -13,6 +13,16 @@ export function LivroCard({ livro, onClick }: LivroCardProps) {
     capaUrl = `http://localhost:3000/uploads/${capaUrl}`;
   }
 
+  // Função para normalizar status: minúsculo, sem acento, underline
+  function normalizarStatus(status: string) {
+    return status
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // remove acentos
+      .replace(/ç/g, 'c')
+      .replace(/\s+/g, '_'); // espaços para underline
+  }
+
   const statusMap: Record<string, string> = {
     lido: 'Lido',
     lendo: 'Lendo',
@@ -22,7 +32,8 @@ export function LivroCard({ livro, onClick }: LivroCardProps) {
     relendo: 'Relendo'
   };
 
-  const statusKey = (livro.status || livro.status_leitura || '').toString().toLowerCase();
+  const rawStatus = (livro.status || livro.status_leitura || '').toString();
+  const statusKey = normalizarStatus(rawStatus);
 
   return (
     <div className="book-card" onClick={onClick}>
@@ -38,7 +49,7 @@ export function LivroCard({ livro, onClick }: LivroCardProps) {
 
       {statusKey && (
         <p className={`book-status status-${statusKey}`}>
-          {statusMap[statusKey] || livro.status || livro.status_leitura}
+          {statusMap[statusKey] || rawStatus}
         </p>
       )}
     </div>

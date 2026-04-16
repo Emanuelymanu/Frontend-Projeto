@@ -13,9 +13,9 @@ export function AnotacoesResenhas() {
     const [loading, setLoading] = useState(true);
     const [expandedLeitura, setExpandedLeitura] = useState<number | null>(null);
     const handleLogout = () => {
-  localStorage.removeItem("token");
-  window.location.href = "/login";
-};
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+    };
 
     useEffect(() => {
         async function fetchData() {
@@ -63,6 +63,14 @@ export function AnotacoesResenhas() {
         );
     }
 
+    // Filtra leituras que têm resenha ou anotações
+    const leiturasComConteudo = leituras.filter((leitura) => {
+        const anotacoes = anotacoesPorLeitura[leitura.id_leitura] || [];
+        const temResenha = leitura.resenha && leitura.resenha.trim().length > 0;
+        const temAnotacoes = anotacoes.length > 0;
+        return temResenha || temAnotacoes;
+    });
+
     return (
         <div className="biblioteca-container">
             <Sidebar onLogout={handleLogout} active="anotacoes-resenhas" />
@@ -70,17 +78,17 @@ export function AnotacoesResenhas() {
             <main className="main-content">
                 <header className="page-header">
                     <h1> Resenhas e Anotações</h1>
-                    <p>{leituras.length} livro(s) lido(s) com anotações</p>
+                    <p>{leiturasComConteudo.length} livro(s) lido(s) com anotações</p>
                 </header>
 
-                {leituras.length === 0 ? (
+                {leiturasComConteudo.length === 0 ? (
                     <div className="empty-state">
                         <p>Nenhuma leitura concluída encontrada.</p>
                         <p>Quando você terminar de ler um livro e escrever resenhas/anotações, elas aparecerão aqui.</p>
                     </div>
                 ) : (
                     <div className="resenhas-grid">
-                        {leituras.map((leitura) => {
+                        {leiturasComConteudo.map((leitura) => {
                             const anotacoes = anotacoesPorLeitura[leitura.id_leitura] || [];
                             const temResenha = leitura.resenha && leitura.resenha.trim().length > 0;
                             const temAnotacoes = anotacoes.length > 0;

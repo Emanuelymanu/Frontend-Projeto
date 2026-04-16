@@ -231,6 +231,7 @@ export function EditarLivro() {
                                 disabled={loading}
                             >
                                 <option value="">Selecione...</option>
+                                <option value="nao_lido">Não lido</option>
                                 <option value="quero_ler">Quero ler</option>
                                 <option value="lendo">Lendo</option>
                                 <option value="lido">Lido</option>

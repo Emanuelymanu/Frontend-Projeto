@@ -6,7 +6,7 @@ import { LivroCard } from "../components/LivroCard";
 import "../css/biblioteca.css";
 import LivroService from "../services/livroService";
 import type { Livro } from "../types/livro";
-import { showConfirmDialog, showSuccessToast} from '../utils/alertUtils';
+import { showConfirmDialog, showSuccessToast } from '../utils/alertUtils';
 
 
 export function Biblioteca() {
@@ -24,9 +24,9 @@ export function Biblioteca() {
   const [avaliacaoFilter, setAvaliacaoFilter] = useState("todos");
   const [sortBy, setSortBy] = useState("titulo");
   const handleLogout = () => {
-  localStorage.removeItem("token");
-  window.location.href = "/login";
-};
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+  };
 
 
   useEffect(() => {
@@ -38,12 +38,14 @@ export function Biblioteca() {
       const data = await LivroService.listar();
 
       // Função para mapear status do backend para o frontend
-      const mapStatus = (status: string | undefined): "Lido" | "Lendo" | "Quero Ler" | "Não lido" | undefined => {
+      const mapStatus = (status: string | undefined): "Lido" | "Lendo" | "Quero Ler" | "Não lido" | "Abandonado" | "Relendo" | undefined => {
         switch (status) {
           case "lido": return "Lido";
           case "lendo": return "Lendo";
           case "quero_ler": return "Quero Ler";
           case "nao_lido": return "Não lido";
+          case "abandonado": return "Abandonado";
+          case "relendo": return "Relendo";
           default: return undefined;
         }
       };
@@ -67,13 +69,13 @@ export function Biblioteca() {
   }
 
   const excluirLivro = async (id: number): Promise<void> => {
-     const confirmado = await showConfirmDialog(
-    ' Confirmar exclusão',
-    'Tem certeza que deseja excluir este livro? Esta ação não pode ser desfeita.',
-    'Sim, excluir',
-    'Cancelar'
-  );
-  if(!confirmado) return;
+    const confirmado = await showConfirmDialog(
+      ' Confirmar exclusão',
+      'Tem certeza que deseja excluir este livro? Esta ação não pode ser desfeita.',
+      'Sim, excluir',
+      'Cancelar'
+    );
+    if (!confirmado) return;
 
     try {
       const response = await LivroService.deletar(id);
@@ -81,7 +83,7 @@ export function Biblioteca() {
       await carregarLivros();
       setLivroSelecionado(null);
     } catch (err) {
-      console.error( err);
+      console.error(err);
     }
   };
 
@@ -159,27 +161,27 @@ export function Biblioteca() {
             <p><strong>Avaliação:</strong> {"⭐".repeat(Number(livroSelecionado.avaliacao) || 0)}</p>
 
             <div className="modal-actions">
-  <button
-    className="btn btn-edit"
-    onClick={() => editarLivro(livroSelecionado)}
-  >
-    Editar
-  </button>
+              <button
+                className="btn btn-edit"
+                onClick={() => editarLivro(livroSelecionado)}
+              >
+                Editar
+              </button>
 
-  <button
-    className="btn btn-delete"
-    onClick={() => excluirLivro(livroSelecionado.id_livro)}
-  >
-    Excluir
-  </button>
+              <button
+                className="btn btn-delete"
+                onClick={() => excluirLivro(livroSelecionado.id_livro)}
+              >
+                Excluir
+              </button>
 
-  <button
-    className="btn btn-close"
-    onClick={() => setLivroSelecionado(null)}
-  >
-    Fechar
-  </button>
-</div>
+              <button
+                className="btn btn-close"
+                onClick={() => setLivroSelecionado(null)}
+              >
+                Fechar
+              </button>
+            </div>
           </div>
         </div>
       )}
