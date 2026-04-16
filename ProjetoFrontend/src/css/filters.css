@@ -1,13 +1,7 @@
-/* =========================================
-   CONTAINER
-========================================= */
 .filters-container {
   margin-bottom: 24px;
 }
 
-/* =========================================
-   CARD
-========================================= */
 .filters-card {
   background-color: white;
   border: 1px solid #e2e8f0;
@@ -15,9 +9,7 @@
   padding: 20px;
 }
 
-/* =========================================
-   GRID (PADRÃO + RESPONSIVO)
-========================================= */
+
 .filters-grid-custom {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* Desktop bonito */
@@ -25,15 +17,11 @@
   align-items: end;
 }
 
-/* =========================================
-   GRUPOS
-========================================= */
 .filters-group {
   display: flex;
   flex-direction: column;
 }
 
-/* LABEL */
 .filters-group label {
   font-size: 13px;
   font-weight: 600;
@@ -41,7 +29,7 @@
   margin-bottom: 6px;
 }
 
-/* SELECT */
+
 .filters-group select {
   width: 100%;
   padding: 10px;
@@ -59,11 +47,7 @@
   box-shadow: 0 0 0 2px #eff6ff;
 }
 
-/* =========================================
-   BOTÕES
-========================================= */
 
-/* FILTRAR (AZUL) */
 .btn-filter-primary {
   height: 40px;
   background: #3b82f6;
@@ -95,11 +79,6 @@
   background: #cbd5e1;
 }
 
-/* =========================================
-   RESPONSIVO
-========================================= */
-
-/* Tablet */
 @media (max-width: 1024px) {
   .filters-grid-custom {
     grid-template-columns: repeat(2, 1fr);

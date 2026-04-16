@@ -13,14 +13,13 @@ export function LivroCard({ livro, onClick }: LivroCardProps) {
     capaUrl = `http://localhost:3000/uploads/${capaUrl}`;
   }
 
-  // Função para normalizar status: minúsculo, sem acento, underline
   function normalizarStatus(status: string) {
     return status
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') // remove acentos
+      .replace(/[\u0300-\u036f]/g, '') 
       .replace(/ç/g, 'c')
-      .replace(/\s+/g, '_'); // espaços para underline
+      .replace(/\s+/g, '_'); 
   }
 
   const statusMap: Record<string, string> = {

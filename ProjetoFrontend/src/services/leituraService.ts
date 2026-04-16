@@ -1,5 +1,4 @@
 import api from "./api";
-// import type { CriarLivroDTO, LivroResponse } from '../types/livro';
 import type { Leitura, LeituraResponse, ListarLeiturasResponse, CriarLeituraDTO, AtualizarProgressoDTO, AvaliarLeituraDTO } from "../types/leitura";
 
 class LeituraService {
@@ -79,7 +78,6 @@ class LeituraService {
 
     async marcarComoLido(id: number, avaliacao?: number, resenha?: string): Promise<LeituraResponse> {
         try {
-            // Primeiro atualiza o status e progresso
             const livro = await this.buscarLeituraPorId(id);
             if (livro) {
                 const respostaProgresso = await this.atualizarProgresso(id, {
@@ -89,7 +87,6 @@ class LeituraService {
                 console.log('Resposta atualizarProgresso:', respostaProgresso);
             }
 
-            // Aguarda o backend processar a mudança de status
             let leituraAtualizada = null;
             let tentativas = 0;
             while (tentativas < 5) {
@@ -104,7 +101,6 @@ class LeituraService {
                 throw { erro: 'O status não foi atualizado para "lido". Tente novamente.' };
             }
 
-            // Só avalia se o status realmente mudou para 'lido'
             if (avaliacao) {
                 return await this.avaliarLeitura(id, { avaliacao, resenha });
             }

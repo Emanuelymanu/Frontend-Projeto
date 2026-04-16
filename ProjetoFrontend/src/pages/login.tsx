@@ -1,10 +1,17 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// Aqui nós avisamos o React para carregar os estilos que vamos criar no passo 2
 import '../css/login.css';
 import { authService } from '../services/authService';
-
 import { showSuccessToast } from '../utils/alertUtils';
+
+function validarEmail(email: string) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}
+
+function validarSenha(senha: string) {
+  return senha.length >= 6;
+}
 
 export function Login() {
   const navegate = useNavigate();
@@ -15,32 +22,45 @@ export function Login() {
 
   const handleLogin = async (evento: React.FormEvent) => {
     evento.preventDefault();
-    setLoading(true);
     setError(null);
+
+    if (!validarEmail(email)) {
+      setError('Digite um email válido');
+      return;
+    }
+
+    if (!validarSenha(senha)) {
+      setError('A senha deve ter pelo menos 6 caracteres');
+      return;
+    }
+
+    setLoading(true);
 
     try {
       const response = await authService.login({ email, senha });
+
       showSuccessToast('Login realizado com sucesso!', response);
+
+      if (response?.token) {
+        localStorage.setItem('token', response.token);
+      }
+
       navegate('/home');
     } catch (erro: any) {
       if (erro?.response?.status === 401) {
         setError('Email ou senha inválidos. Tente novamente.');
+      } else {
+        setError('Erro ao fazer login. Tente novamente mais tarde.');
       }
-      // Removido navegate('/login') para evitar loop
     } finally {
       setLoading(false);
     }
   };
 
-
   return (
-    // A div 'login-container' vai ocupar a tela toda e ter o fundo azul claro
     <div className="login-container">
-
-      {/* A div 'login-card' é o quadrado branco no centro */}
       <div className="login-card">
 
-        {/* Ícone de Livro (Desenhado com SVG puro para não precisar baixar imagens) */}
         <div className="icon-container">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
@@ -49,15 +69,19 @@ export function Login() {
 
         <h1 className="login-title">Minha Biblioteca</h1>
         <p className="login-subtitle">Entre para gerenciar seus livros</p>
-        {typeof error === 'string' && error && (
-          <div className='error-mensagem' style={{
-            backgroundColor: '#fee2e2',
-            color: '#dc2626',
-            padding: '10px',
-            borderRadius: '6px',
-            marginBottom: '15px',
-            fontSize: '14px'
-          }}>
+
+        {error && (
+          <div
+            className='error-mensagem'
+            style={{
+              backgroundColor: '#fee2e2',
+              color: '#dc2626',
+              padding: '10px',
+              borderRadius: '6px',
+              marginBottom: '15px',
+              fontSize: '14px'
+            }}
+          >
             {error}
           </div>
         )}
@@ -91,7 +115,7 @@ export function Login() {
           </div>
 
           <button type="submit" className="login-button" disabled={loading}>
-            Entrar
+            {loading ? 'Entrando...' : 'Entrar'}
           </button>
 
         </form>

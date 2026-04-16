@@ -49,7 +49,6 @@ function Home() {
 
       <main className="main-content">
 
-        {/* BANNER */}
         <section className="welcome-banner">
           <div className="banner-content">
             <BookOpen size={48} color="white" />
@@ -58,7 +57,6 @@ function Home() {
           </div>
         </section>
 
-        {/* TOP AVALIADOS */}
         <section className="top-rated-section">
           <div className="section-header">
             <div className="section-title">
@@ -70,13 +68,11 @@ function Home() {
             {topAvaliados.map((livro) => (
               <div key={livro.id_livro} className="book-card-wrapper">
 
-                {/* ⭐ NOTA */}
                 <div className="rating-badge">
                   <Star size={14} fill="#fbbf24" color="#fbbf24" />
                   <span>{livro.avaliacao}</span>
                 </div>
 
-                {/* 🔥 REAPROVEITANDO CARD */}
                 <LivroCard
                   livro={livro}
                   onClick={() => navigate("/biblioteca")}

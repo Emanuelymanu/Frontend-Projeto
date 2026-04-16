@@ -101,7 +101,6 @@ export function CadastroLivro() {
         <div className="form-wrapper">
           <form onSubmit={handleSubmit} className="form-cadastro">
 
-            {/* CAPA */}
             <div className="input-group">
               <label>Capa</label>
               <input
@@ -112,7 +111,6 @@ export function CadastroLivro() {
                 disabled={loading}
               />
             </div>
-            {/* PREVIEW */}
             <div className="preview">
               {capaPreview ? (
                 <img src={capaPreview} alt="capa" />
@@ -121,8 +119,6 @@ export function CadastroLivro() {
               )}
             </div>
 
-
-            {/* TÍTULO */}
             <div className="input-group">
               <label>Título *</label>
               <input
@@ -133,7 +129,6 @@ export function CadastroLivro() {
               />
             </div>
 
-            {/* SUBTÍTULO */}
             <div className="input-group">
               <label>Subtítulo</label>
               <input
@@ -143,7 +138,6 @@ export function CadastroLivro() {
               />
             </div>
 
-            {/* AUTOR */}
             <div className="input-group">
               <label>Autor</label>
               <input
@@ -153,7 +147,6 @@ export function CadastroLivro() {
               />
             </div>
 
-            {/* TIPO OBRA */}
             <div className="input-group">
               <label>Tipo de Obra</label>
               <select
@@ -170,7 +163,6 @@ export function CadastroLivro() {
               </select>
             </div>
 
-            {/* NOME SÉRIE */}
             <div className="input-group">
               <label>Nome da Série</label>
               <input
@@ -180,7 +172,6 @@ export function CadastroLivro() {
               />
             </div>
 
-            {/* ANO PUBLICAÇÃO */}
             <div className="input-group">
               <label>Ano de Publicação</label>
               <input
@@ -191,7 +182,6 @@ export function CadastroLivro() {
               />
             </div>
 
-            {/* NÚMERO DE PÁGINAS */}
             <div className="input-group">
               <label>Número de Páginas</label>
               <input
@@ -202,7 +192,6 @@ export function CadastroLivro() {
               />
             </div>
 
-            {/* GÊNERO */}
             <div className="input-group">
               <label>Gênero</label>
               <input
@@ -212,7 +201,6 @@ export function CadastroLivro() {
               />
             </div>
 
-            {/* EDITORA */}
             <div className="input-group">
               <label>Editora</label>
               <input

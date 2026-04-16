@@ -6,19 +6,36 @@ import type { UsuarioPerfil } from "../types/perfil";
 import { showErrorToast, showSuccessToast, showWarningToast } from "../utils/alertUtils";
 import "../css/MeuPerfil.css";
 
+function validarCPF(cpf: string) {
+  cpf = cpf.replace(/[^\d]+/g, '');
+  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+  let soma = 0;
+  let resto;
+  for (let i = 1; i <= 9; i++) {
+    soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+  }
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.substring(9, 10))) return false;
+  soma = 0;
+  for (let i = 1; i <= 10; i++) {
+    soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+  }
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  return resto === parseInt(cpf.substring(10, 11));
+}
+
 export function MeuPerfil() {
   const [editando, setEditando] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
- 
-
 
   const [perfil, setPerfil] = useState<UsuarioPerfil | null>(null);
 
-
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
-  const [senhaAtual, setSenhaAtual] = useState(""); 
+  const [senhaAtual, setSenhaAtual] = useState("");
   const [novaSenha, setNovaSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
 
@@ -27,14 +44,12 @@ export function MeuPerfil() {
     window.location.href = "/login";
   };
 
-
   useEffect(() => {
     carregarPerfil();
   }, []);
 
   const carregarPerfil = async () => {
     setLoading(true);
-
     try {
       const data = await perfilService.buscarPerfil();
       setPerfil(data);
@@ -42,7 +57,6 @@ export function MeuPerfil() {
       setCpf(formatarCPF(data.cpf));
     } catch (err: any) {
       showErrorToast("Erro ao carregar perfil:");
-
     } finally {
       setLoading(false);
     }
@@ -70,9 +84,6 @@ export function MeuPerfil() {
   };
 
   const handleSalvar = async () => {
-    showWarningToast("");
-
-
     if (!nome.trim()) {
       showWarningToast("O nome é obrigatório");
       return;
@@ -88,17 +99,15 @@ export function MeuPerfil() {
       return;
     }
 
-
     let cpfEnviar: string | undefined;
     if (cpf !== formatarCPF(perfil?.cpf || "")) {
       const cpfLimpo = desformatarCPF(cpf);
-      if (cpfLimpo.length !== 11) {
-        showWarningToast("CPF deve conter 11 dígitos");
+      if (!validarCPF(cpfLimpo)) {
+        showWarningToast("CPF inválido");
         return;
       }
       cpfEnviar = cpfLimpo;
     }
-
 
     let senhaEnviar: string | undefined;
     if (novaSenha) {
@@ -121,7 +130,6 @@ export function MeuPerfil() {
       senhaEnviar = novaSenha;
     }
 
-
     if (nome === perfil?.nome && !cpfEnviar && !senhaEnviar) {
       setEditando(false);
       return;
@@ -137,7 +145,6 @@ export function MeuPerfil() {
 
       const response = await perfilService.atualizarPerfil(dadosAtualizar);
 
-
       setPerfil(response.usuario);
       showSuccessToast("Perfil atualizado com sucesso!");
 
@@ -147,27 +154,22 @@ export function MeuPerfil() {
         localStorage.setItem('usuario', JSON.stringify(user));
       }
 
-
       setSenhaAtual("");
       setNovaSenha("");
       setConfirmarSenha("");
 
-
       setTimeout(() => {
         setEditando(false);
-
       }, 2000);
 
     } catch (err: any) {
       showErrorToast("Erro ao salvar");
-
     } finally {
       setSaving(false);
     }
   };
 
   const handleCancelar = () => {
-
     if (perfil) {
       setNome(perfil.nome);
       setCpf(formatarCPF(perfil.cpf));
@@ -191,8 +193,6 @@ export function MeuPerfil() {
     );
   }
 
-
-
   return (
     <div className="biblioteca-container">
       <Sidebar onLogout={handleLogout} active="MeuPerfil" />
@@ -205,7 +205,6 @@ export function MeuPerfil() {
 
         <div className="perfil-card">
           {!editando ? (
-
             <div className="perfil-visualizacao">
               <div className="avatar-placeholder">
                 <span>{perfil?.nome.charAt(0).toUpperCase()}</span>
@@ -223,18 +222,13 @@ export function MeuPerfil() {
                 <p>{formatarCPF(perfil?.cpf || "")}</p>
               </div>
 
-
-
               <button className="btn-editar" onClick={() => setEditando(true)}>
                 Editar Perfil
               </button>
             </div>
           ) : (
-
             <div className="perfil-edicao">
               <h2>Editar Perfil</h2>
-
-
 
               <div className="form-group">
                 <label>Nome completo *</label>

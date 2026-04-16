@@ -105,20 +105,6 @@ export function Filters(props: any) {
           </div>
 
           <div className="filters-group">
-            <label>Ordenar</label>
-            <button
-              className="btn-filter-secondary"
-              onClick={() =>
-                props.setSortBy(
-                  props.sortBy === "titulo" ? "id" : "titulo"
-                )
-              }
-            >
-              {props.sortBy === "titulo" ? "Título" : "Mais novos"}
-            </button>
-          </div>
-
-          <div className="filters-group">
             <button
               className="btn-filter-primary"
               onClick={aplicarFiltro}

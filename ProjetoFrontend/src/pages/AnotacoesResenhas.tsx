@@ -1,4 +1,3 @@
-// frontend/src/pages/AnotacoesResenhas.tsx
 import { useEffect, useState } from "react";
 import { leituraService } from "../services/leituraService";
 import { anotacaoService } from "../services/anotacaoService";
@@ -21,11 +20,9 @@ export function AnotacoesResenhas() {
         async function fetchData() {
             setLoading(true);
             try {
-                // Busca leituras concluídas (lidas)
                 const concluidas = await leituraService.listarLeiturasConcluidas();
                 setLeituras(concluidas);
 
-                // Busca anotações para cada leitura
                 const anotacoesMap: Record<number, Anotacao[]> = {};
                 for (const leitura of concluidas) {
                     try {
@@ -63,7 +60,6 @@ export function AnotacoesResenhas() {
         );
     }
 
-    // Filtra leituras que têm resenha ou anotações
     const leiturasComConteudo = leituras.filter((leitura) => {
         const anotacoes = anotacoesPorLeitura[leitura.id_leitura] || [];
         const temResenha = leitura.resenha && leitura.resenha.trim().length > 0;
@@ -132,7 +128,6 @@ export function AnotacoesResenhas() {
                                                 </div>
                                             )}
 
-                                            {/* ANOTAÇÕES */}
                                             <div className="anotacoes-section">
                                                 <h4> Anotações {temAnotacoes && `(${anotacoes.length})`}</h4>
                                                 {temAnotacoes ? (

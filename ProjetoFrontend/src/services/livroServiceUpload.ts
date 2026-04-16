@@ -7,14 +7,12 @@ class LivroServiceUpload {
         try {
             const formData = new FormData();
 
-            // Adiciona todos os campos do livro ao FormData
             Object.entries(dados).forEach(([key, value]) => {
                 if (value !== undefined && value !== null && value !== '') {
                     formData.append(key, String(value));
                 }
             });
 
-            // Adiciona o arquivo da capa
             formData.append('capa', capaFile);
 
             const response = await api.post<LivroResponse>('/livros/cadastrar', formData, {

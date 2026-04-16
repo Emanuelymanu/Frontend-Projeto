@@ -81,10 +81,8 @@ export function LeiturasCard() {
                 conteudo: novaAnotacao.conteudo
             });
 
-            // Recarrega as anotações da página
             await carregarAnotacoes(livroSelecionado.id_leitura, paginaSelecionada);
 
-            // Limpa o formulário
             setNovaAnotacao({ titulo: "", conteudo: "" });
             setMostrarFormAnotacao(false);
 
@@ -174,18 +172,15 @@ export function LeiturasCard() {
                 )}
             </div>
 
-            {/* MODAL DE LEITURA COM ANOTAÇÕES */}
             {livroSelecionado && (
                 <div className="modal-overlay" onClick={() => setLivroSelecionado(null)}>
                     <div className="modal-content-large" onClick={(e) => e.stopPropagation()}>
 
-                        {/* CABEÇALHO DO LIVRO */}
                         <div className="modal-header">
                             <h2>{livroSelecionado.livro?.titulo}</h2>
                             <p><strong>Autor:</strong> {livroSelecionado.livro?.autor}</p>
                         </div>
 
-                        {/* CONTROLE DE PROGRESSO */}
                         <div className="progress-section">
                             <h3>Progresso de Leitura</h3>
                             <div className="progress-controls">
@@ -201,10 +196,9 @@ export function LeiturasCard() {
                             </div>
                         </div>
 
-                        {/* SEÇÃO DE ANOTAÇÕES */}
                         <div className="anotacoes-section">
                             <div className="anotacoes-header">
-                                <h3>📝 Anotações</h3>
+                                <h3>Anotações</h3>
                                 <div className="pagina-navegacao">
                                     <button
                                         onClick={() => handlePaginaChange(paginaSelecionada - 1)}
@@ -222,7 +216,6 @@ export function LeiturasCard() {
                                 </div>
                             </div>
 
-                            {/* LISTA DE ANOTAÇÕES DA PÁGINA */}
                             <div className="anotacoes-lista">
                                 {carregandoAnotacoes ? (
                                     <p>Carregando anotações...</p>
@@ -232,7 +225,6 @@ export function LeiturasCard() {
                                     anotacoes.map((anotacao) => (
                                         <div key={anotacao.id_anotacao} className="anotacao-item">
                                             {editandoAnotacao?.id_anotacao === anotacao.id_anotacao ? (
-                                                // EDITANDO ANOTAÇÃO
                                                 <div className="anotacao-edicao">
                                                     <input
                                                         type="text"
@@ -258,14 +250,13 @@ export function LeiturasCard() {
                                                     </div>
                                                 </div>
                                             ) : (
-                                                // VISUALIZANDO ANOTAÇÃO
                                                 <>
                                                     {anotacao.titulo && <h4>{anotacao.titulo}</h4>}
                                                     <p>{anotacao.conteudo}</p>
                                                     <small>Página {anotacao.pagina}</small>
                                                     <div className="anotacao-botoes">
-                                                        <button onClick={() => setEditandoAnotacao(anotacao)}>✏️ Editar</button>
-                                                        <button onClick={() => handleDeletarAnotacao(anotacao.id_anotacao)}>🗑️ Excluir</button>
+                                                        <button onClick={() => setEditandoAnotacao(anotacao)}> Editar</button>
+                                                        <button onClick={() => handleDeletarAnotacao(anotacao.id_anotacao)}>Excluir</button>
                                                     </div>
                                                 </>
                                             )}
@@ -274,7 +265,6 @@ export function LeiturasCard() {
                                 )}
                             </div>
 
-                            {/* BOTÃO PARA NOVA ANOTAÇÃO */}
                             {!mostrarFormAnotacao ? (
                                 <button
                                     className="btn-nova-anotacao"

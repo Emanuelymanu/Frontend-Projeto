@@ -1,5 +1,3 @@
-
-
 import api from './api';
 import type {
   CriarAnotacaoDTO,
@@ -10,7 +8,6 @@ import type {
 } from '../types/anotacao';
 
 class AnotacaoService {
-  // Buscar todas as anotações de uma leitura
   async buscarTodasPorLeitura(id_leitura: number): Promise<Anotacao[]> {
     try {
       const response = await api.get<{ anotacoes: Anotacao[] }>(`/anotacoes/leitura/${id_leitura}`);
@@ -20,7 +17,6 @@ class AnotacaoService {
       return [];
     }
   }
-  // Criar uma nova anotação
   async criarAnotacao(dados: CriarAnotacaoDTO): Promise<AnotacaoResponse> {
     try {
       const response = await api.post<AnotacaoResponse>('/anotacoes', dados);
@@ -31,7 +27,6 @@ class AnotacaoService {
     }
   }
 
-  // Buscar anotações por leitura e página
   async buscarPorPagina(id_leitura: number, pagina: number): Promise<AnotacoesPorPaginaResponse> {
     try {
       const response = await api.get<AnotacoesPorPaginaResponse>(
@@ -73,7 +68,6 @@ class AnotacaoService {
     }
   }
 
-  // Atualizar uma anotação
   async atualizarAnotacao(id: number, dados: AtualizarAnotacaoDTO): Promise<AnotacaoResponse> {
     try {
       const response = await api.put<AnotacaoResponse>(`/anotacoes/${id}`, dados);
@@ -84,7 +78,6 @@ class AnotacaoService {
     }
   }
 
-  // Deletar uma anotação
   async deletarAnotacao(id: number): Promise<{ mensagem: string }> {
     try {
       const response = await api.delete(`/anotacoes/${id}`);

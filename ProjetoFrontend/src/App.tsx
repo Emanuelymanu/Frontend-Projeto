@@ -1,10 +1,8 @@
-// 1. Importamos as ferramentas de rota
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-// 2. Importamos as três páginas que já criou
 import { Login } from './pages/login';
 import { Cadastro } from './pages/cadastro';
-import  Home  from './pages/home'; // <-- Adicionámos a importação da Home aqui!
+import  Home  from './pages/home'; 
 import { Biblioteca } from './pages/biblioteca';
 import { EditarLivro } from './pages/EditarLivro';
 import { Dashboard } from './pages/dashboard';

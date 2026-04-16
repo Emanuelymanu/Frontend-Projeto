@@ -23,15 +23,12 @@ export function Sidebar({ onLogout, active }: SidebarProps) {
 
   return (
     <>
-      {/* BOTÃO HAMBURGUER */}
       <button className="hamburger" onClick={() => setOpen(!open)}>
         <Menu size={24} />
       </button>
 
-      {/* OVERLAY (fundo escuro) */}
       {open && <div className="overlay" onClick={() => setOpen(false)} />}
 
-      {/* SIDEBAR */}
       <aside className={`sidebar ${open ? "open" : ""}`}>
 
         <div className="sidebar-header">

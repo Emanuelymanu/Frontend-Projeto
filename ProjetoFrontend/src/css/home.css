@@ -5,13 +5,11 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* MAIN */
 .main-content {
   flex: 1;
   padding: 40px;
 }
 
-/* BANNER */
 .welcome-banner {
   background: linear-gradient(135deg, #3b82f6, #a855f7);
   border-radius: 16px;
@@ -30,7 +28,6 @@
   font-size: 28px;
 }
 
-/* TOP AVALIADOS */
 .top-rated-section {
   margin-top: 40px;
 }
@@ -40,7 +37,6 @@
   color: #0f172a;
 }
 
-/* SCROLL HORIZONTAL */
 .books-scroll {
   display: flex;
   gap: 20px;
@@ -48,13 +44,11 @@
   padding-top: 10px;
 }
 
-/* CARD WRAPPER */
 .book-card-wrapper {
   position: relative;
   min-width: 160px;
 }
 
-/* BADGE */
 .rating-badge {
   position: absolute;
   top: 6px;
@@ -70,7 +64,6 @@
   font-weight: 600;
 }
 
-/* RESPONSIVO */
 @media (max-width: 768px) {
   .main-content {
     padding: 20px;

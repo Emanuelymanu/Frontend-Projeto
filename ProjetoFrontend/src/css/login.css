@@ -1,6 +1,3 @@
-/* login.css */
-
-/* 1. Fundo da tela inteira */
 .login-container {
   display: flex;
   justify-content: center;
@@ -10,18 +7,16 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* 2. O cartão branco no meio */
 .login-card {
   background-color: white;
   padding: 40px;
-  border-radius: 16px; /* Deixa as bordas bem arredondadas */
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); /* Sombra suave */
+  border-radius: 16px; 
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   width: 100%;
   max-width: 380px;
-  text-align: center; /* Centraliza os textos e o ícone */
+  text-align: center;
 }
 
-/* 3. Textos do cabeçalho */
 .icon-container { margin-bottom: 16px; }
 
 .login-title {
@@ -38,12 +33,11 @@
   font-size: 14px;
 }
 
-/* 4. Formulário e Inputs */
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  text-align: left; /* Volta o texto para a esquerda */
+  text-align: left; 
 }
 
 .input-group {
@@ -63,18 +57,18 @@
   border: 1px solid #cbd5e1;
   border-radius: 8px;
   font-size: 15px;
-  outline: none; /* Tira aquela borda preta padrão feia */
-  transition: border-color 0.2s; /* Animação suave */
+  outline: none; 
+  transition: border-color 0.2s; 
 }
 
 .input-group input:focus {
-  border-color: #2563eb; /* Fica azul quando o usuário clica dentro */
+  border-color: #2563eb; 
 }
 
 /* 5. Botão de Entrar */
 .login-button {
   padding: 14px;
-  background-color: #1d4ed8; /* Azul forte igual da foto */
+  background-color: #1d4ed8; 
   color: white;
   border: none;
   border-radius: 8px;
@@ -86,10 +80,9 @@
 }
 
 .login-button:hover {
-  background-color: #1e40af; /* Fica um pouco mais escuro ao passar o mouse */
+  background-color: #1e40af;
 }
 
-/* 6. Rodapé do cadastre-se */
 .login-footer {
   margin-top: 24px;
   font-size: 14px;

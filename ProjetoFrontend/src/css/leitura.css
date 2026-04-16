@@ -1,4 +1,3 @@
-/* GRID (se já tiver, mantém) */
 .books-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -6,7 +5,6 @@
   margin-top: 20px;
 }
 
-/* MODAL FUNDO */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -22,7 +20,6 @@
   z-index: 1000;
 }
 
-/* MODAL CAIXA */
 .modal-content {
   background: white;
   padding: 20px;
@@ -33,12 +30,10 @@
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
-/* TÍTULO */
 .modal-content h2 {
   margin-bottom: 10px;
 }
 
-/* BOTÕES PADRÃO */
 .modal-content button {
   width: 100%;
   margin-top: 10px;
@@ -58,7 +53,6 @@
   background: #1d4ed8;
 }
 
-/* BOTÃO ABANDONAR (vermelho) */
 .modal-content button:nth-of-type(2) {
   background: #ef4444;
 }
@@ -67,7 +61,6 @@
   background: #dc2626;
 }
 
-/* ESTRELAS */
 .modal-content div button {
   width: auto;
   background: none;
@@ -81,9 +74,6 @@
   transform: scale(1.2);
 }
 
-/* frontend/src/css/leitura.css */
-
-/* Modal grande */
 .modal-content-large {
   max-width: 700px;
   width: 90%;
@@ -105,7 +95,6 @@
   color: #1f2937;
 }
 
-/* Abas */
 .tabs {
   display: flex;
   gap: 8px;
@@ -138,7 +127,6 @@
   margin-bottom: 20px;
 }
 
-/* Barra de progresso */
 .progress-info {
   margin-bottom: 20px;
 }
@@ -158,7 +146,6 @@
   transition: width 0.3s;
 }
 
-/* Navegação de páginas */
 .pagina-navegacao {
   display: flex;
   justify-content: space-between;
@@ -182,7 +169,6 @@
   cursor: not-allowed;
 }
 
-/* Anotações */
 .anotacoes-lista {
   max-height: 350px;
   overflow-y: auto;
@@ -295,7 +281,6 @@
   cursor: pointer;
 }
 
-/* Botões de avaliação */
 .avaliacao-buttons {
   display: flex;
   gap: 8px;
@@ -439,7 +424,6 @@
   font-size: 14px;
 }
 
-/* MODAL DE GERENCIAMENTO DE TAGS */
 .modal-content-tags {
   max-width: 600px;
   width: 90%;
@@ -534,7 +518,6 @@
   border-radius: 6px;
 }
 
-/* TAGS NA ABA DE TAGS DO MODAL */
 .tags-gestao h4 {
   margin: 0 0 16px 0;
   color: #374151;

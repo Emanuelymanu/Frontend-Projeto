@@ -4,6 +4,42 @@ import { authService } from '../services/authService';
 import '../css/login.css';
 import { showErrorToast, showSuccessToast } from '../utils/alertUtils';
 
+function validarEmail(email: string) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+}
+
+function validarSenha(senha: string) {
+  return senha.length >= 6;
+}
+
+function validarCPF(cpf: string) {
+  cpf = cpf.replace(/[^\d]+/g, '');
+
+  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+  let soma = 0;
+  let resto;
+
+  for (let i = 1; i <= 9; i++) {
+    soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+  }
+
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.substring(9, 10))) return false;
+
+  soma = 0;
+  for (let i = 1; i <= 10; i++) {
+    soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+  }
+
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+
+  return resto === parseInt(cpf.substring(10, 11));
+}
+
 export function Cadastro() {
 
   const navigate = useNavigate();
@@ -13,27 +49,39 @@ export function Cadastro() {
   const [senha, setSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState<string | null>(null); // Removido pois não está sendo utilizado
 
   const handleCadastro = async (evento: React.FormEvent) => {
     evento.preventDefault();
 
+
+    if (!nome || !email || !cpf || !senha || !confirmarSenha) {
+      showErrorToast('Preencha todos os campos!');
+      return;
+    }
+
+    if (!validarEmail(email)) {
+      showErrorToast('Email inválido!');
+      return;
+    }
+
+    const cpfNumerico = cpf.replace(/\D/g, '');
+
+    if (!validarCPF(cpfNumerico)) {
+      showErrorToast('CPF inválido!');
+      return;
+    }
+
+    if (!validarSenha(senha)) {
+      showErrorToast('A senha deve ter pelo menos 6 caracteres');
+      return;
+    }
 
     if (senha !== confirmarSenha) {
       showErrorToast('As senhas não conferem!');
       return;
     }
 
-    const cpfNumerico = cpf.replace(/\D/g, '');
-    if (cpfNumerico.length !== 11) {
-      showErrorToast('CPF inválido! Digite 11 números');
-      return;
-    }
-
-
     setLoading(true);
-   
-
 
     try {
       await authService.cadastro({
@@ -42,11 +90,14 @@ export function Cadastro() {
         cpf: cpfNumerico,
         senha
       });
+
       showSuccessToast("Cadastro realizado com sucesso, faça login para continuar");
       navigate('/login');
+
     } catch (error: any) {
 
       let errorMensagem = "Erro ao cadastrar";
+
       if (error?.mensagem) {
         errorMensagem = error.mensagem;
       } else if (error?.response?.data?.mensagem) {
@@ -54,9 +105,10 @@ export function Cadastro() {
       } else if (error?.message) {
         errorMensagem = error.message;
       }
-    
 
-      showErrorToast("Erro no cadastro");
+      showErrorToast(errorMensagem);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -78,12 +130,9 @@ export function Cadastro() {
   };
 
   return (
-
     <div className="login-container">
 
-
       <div className="login-card">
-
 
         <div className="icon-container">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -93,7 +142,6 @@ export function Cadastro() {
 
         <h1 className="login-title">Criar Conta</h1>
         <p className="login-subtitle">Cadastre-se para começar</p>
-
 
         <form onSubmit={handleCadastro} className="login-form">
 
@@ -163,13 +211,13 @@ export function Cadastro() {
           </div>
 
           <button type="submit" className="login-button" disabled={loading}>
-            Cadastrar
+            {loading ? 'Cadastrando...' : 'Cadastrar'}
           </button>
 
         </form>
 
         <div className="login-footer">
-          Já tem uma conta?  <Link to="/login">Entrar</Link>
+          Já tem uma conta? <Link to="/login">Entrar</Link>
         </div>
 
       </div>
