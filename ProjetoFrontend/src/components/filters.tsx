@@ -7,7 +7,7 @@ export function Filters(props: any) {
 
     if (props.statusFilter !== "todos") {
       filtrados = filtrados.filter(
-        (l: any) => l.status === props.statusFilter
+        (l: any) => l.status_leitura === props.statusFilter
       );
     }
 

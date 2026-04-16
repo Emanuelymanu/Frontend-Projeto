@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Sidebar } from "../components/sidebar";
 import { Filters } from "../components/filters";
 import { LivroCard } from "../components/LivroCard";
@@ -11,6 +12,7 @@ import { showConfirmDialog, showSuccessToast } from '../utils/alertUtils';
 
 export function Biblioteca() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [livros, setLivros] = useState<Livro[]>([]);
 
@@ -31,13 +33,13 @@ export function Biblioteca() {
 
   useEffect(() => {
     carregarLivros();
-  }, []);
+  }, [location.pathname]);
 
   const carregarLivros = async (): Promise<void> => {
     try {
       const data = await LivroService.listar();
 
-      
+
       const mapStatus = (status: string | undefined): "Lido" | "Lendo" | "Quero Ler" | "Não lido" | "Abandonado" | "Relendo" | undefined => {
         switch (status) {
           case "lido": return "Lido";
