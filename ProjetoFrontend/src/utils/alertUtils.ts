@@ -2,21 +2,21 @@ import Swal from "sweetalert2";
 import type { LoginResponse } from "../types";
 
 export const showSuccessToast = (message: string, response?: LoginResponse) => {
-    const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-        }
-    });
-    Toast.fire({
-        icon: 'success',
-        title: message
-    });
+  const Toast = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    didOpen: (toast) => {
+      toast.addEventListener('mouseenter', Swal.stopTimer)
+      toast.addEventListener('mouseleave', Swal.resumeTimer)
+    }
+  });
+  Toast.fire({
+    icon: 'success',
+    title: message
+  });
 };
 
 export const showErrorToast = (message: string) => {
@@ -85,4 +85,21 @@ export const showConfirmDialog = async (
     cancelButtonText: cancelText
   });
   return result.isConfirmed;
+};
+
+export const showTagActionDialog = async (tagName: string, vinculada: boolean) => {
+  return await Swal.fire({
+    title: `O que deseja fazer com a tag "${tagName}"?`,
+    icon: 'question',
+    showCancelButton: true,
+    showDenyButton: true,
+    confirmButtonText: vinculada ? 'Desvincular' : 'Vincular',
+    denyButtonText: vinculada ? 'Vincular' : 'Desvincular',
+    cancelButtonText: 'Cancelar',
+    confirmButtonColor: vinculada ? '#ef4444' : '#10b981',
+    denyButtonColor: vinculada ? '#10b981' : '#ef4444',
+    reverseButtons: true,
+    preConfirm: () => vinculada ? 'desvincular' : 'vincular',
+    preDeny: () => vinculada ? 'vincular' : 'desvincular',
+  });
 };

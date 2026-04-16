@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
 import '../css/login.css';
-import { showErrorToast, showSuccessToast } from '../utils/alertUtils';
+import { showErrorToast, showSuccessToast, } from '../utils/alertUtils';
 
 function validarEmail(email: string) {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

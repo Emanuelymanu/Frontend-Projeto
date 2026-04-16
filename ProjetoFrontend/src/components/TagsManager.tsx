@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Tag } from "../types/tags";
 import { tagService } from "../services/tagsService";
+import { showErrorToast, showSuccessToast, showWarningToast } from '../utils/alertUtils';
 
 
 
@@ -20,7 +21,7 @@ export function TagsManager({ tags, setTags, mostrarModalTags, setMostrarModalTa
 
     const handleCriarTag = async () => {
         if (!novaTag.nome.trim()) {
-            alert("Digite um nome para a tag");
+            showWarningToast("Digite um nome para a tag");
             return;
         }
         try {
@@ -30,9 +31,9 @@ export function TagsManager({ tags, setTags, mostrarModalTags, setMostrarModalTa
             });
             setTags([...tags, tag]);
             setNovaTag({ nome: "", cor: "#3b82f6" });
-            alert("Tag criada com sucesso!");
+            
         } catch (err: any) {
-            alert(err.erro || "Erro ao criar tag");
+            showErrorToast( "Erro ao criar tag");
         }
     };
 
@@ -45,9 +46,9 @@ export function TagsManager({ tags, setTags, mostrarModalTags, setMostrarModalTa
             });
             setTags(tags.map(t => t.id_tag === tag.id_tag ? tag : t));
             setEditandoTag(null);
-            alert("Tag atualizada com sucesso!");
+            showSuccessToast("Tag atualizada com sucesso!");
         } catch (err: any) {
-            alert(err.erro || "Erro ao atualizar tag");
+            showErrorToast( "Erro ao atualizar tag");
         }
     };
 
@@ -56,9 +57,9 @@ export function TagsManager({ tags, setTags, mostrarModalTags, setMostrarModalTa
         try {
             await tagService.deletarTag(id);
             setTags(tags.filter(t => t.id_tag !== id));
-            alert("Tag excluída com sucesso!");
+            showSuccessToast("Tag excluída com sucesso!");
         } catch (err: any) {
-            alert(err.erro || "Erro ao excluir tag");
+            showErrorToast("Erro ao excluir tag");
         }
     };
 
