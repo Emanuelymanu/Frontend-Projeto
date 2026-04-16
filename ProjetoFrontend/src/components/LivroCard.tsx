@@ -1,6 +1,4 @@
-
 import '../css/LivroCard.css';
-
 import type { Livro } from "../types/livro";
 
 interface LivroCardProps {
@@ -9,12 +7,12 @@ interface LivroCardProps {
 }
 
 export function LivroCard({ livro, onClick }: LivroCardProps) {
-  // Monta a URL da capa se necessário
   let capaUrl = livro.capa;
+
   if (capaUrl && !capaUrl.startsWith('http')) {
     capaUrl = `http://localhost:3000/uploads/${capaUrl}`;
   }
-  // Tradução para status amigável
+
   const statusMap: Record<string, string> = {
     lido: 'Lido',
     lendo: 'Lendo',
@@ -23,6 +21,8 @@ export function LivroCard({ livro, onClick }: LivroCardProps) {
     abandonado: 'Abandonado',
     relendo: 'Relendo'
   };
+
+  const statusKey = (livro.status || livro.status_leitura || '').toString().toLowerCase();
 
   return (
     <div className="book-card" onClick={onClick}>
@@ -33,16 +33,14 @@ export function LivroCard({ livro, onClick }: LivroCardProps) {
           <span>📖</span>
         )}
       </div>
+
       <h3 className="book-title">{livro.titulo}</h3>
-      {(livro.status || livro.status_leitura) && (() => {
-        const statusKey = (livro.status || livro.status_leitura || '').toString().toLowerCase();
-        return (
-          <p className="book-status">
-            Status: {statusMap[statusKey] || livro.status || livro.status_leitura}
-          </p>
-        );
-      })()}
+
+      {statusKey && (
+        <p className={`book-status status-${statusKey}`}>
+          {statusMap[statusKey] || livro.status || livro.status_leitura}
+        </p>
+      )}
     </div>
   );
 }
-

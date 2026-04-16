@@ -1,38 +1,34 @@
+import "../css/filters.css";
 
 export function Filters(props: any) {
 
   function aplicarFiltro() {
     let filtrados = props.livros;
 
-    // STATUS
     if (props.statusFilter !== "todos") {
       filtrados = filtrados.filter(
         (l: any) => l.status === props.statusFilter
       );
     }
 
-    // GÊNERO
     if (props.generoFilter !== "todos") {
       filtrados = filtrados.filter(
         (l: any) => l.genero === props.generoFilter
       );
     }
 
-    // EDITORA
     if (props.editoraFilter !== "todos") {
       filtrados = filtrados.filter(
         (l: any) => l.editora === props.editoraFilter
       );
     }
 
-    // AVALIAÇÃO
     if (props.avaliacaoFilter !== "todos") {
       filtrados = filtrados.filter(
         (l: any) => l.avaliacao === Number(props.avaliacaoFilter)
       );
     }
 
-    // ORDENAÇÃO
     if (props.sortBy === "titulo") {
       filtrados = [...filtrados].sort((a: any, b: any) =>
         a.titulo.localeCompare(b.titulo)
@@ -47,10 +43,11 @@ export function Filters(props: any) {
   }
 
   return (
-    <section className="filter-section">
-      <div className="filter-card">
-        <div className="filters-grid" style={{ alignItems: 'end' }}>
-          <div className="select-group">
+    <section className="filters-container">
+      <div className="filters-card">
+        <div className="filters-grid-custom">
+
+          <div className="filters-group">
             <label>Status</label>
             <select
               value={props.statusFilter}
@@ -61,7 +58,8 @@ export function Filters(props: any) {
               <option value="Lendo">Lendo</option>
             </select>
           </div>
-          <div className="select-group">
+
+          <div className="filters-group">
             <label>Gênero</label>
             <select
               value={props.generoFilter}
@@ -73,7 +71,8 @@ export function Filters(props: any) {
               ))}
             </select>
           </div>
-          <div className="select-group">
+
+          <div className="filters-group">
             <label>Editora</label>
             <select
               value={props.editoraFilter}
@@ -85,7 +84,8 @@ export function Filters(props: any) {
               ))}
             </select>
           </div>
-          <div className="select-group">
+
+          <div className="filters-group">
             <label>Avaliação</label>
             <select
               value={props.avaliacaoFilter}
@@ -99,9 +99,11 @@ export function Filters(props: any) {
               <option value="5">5</option>
             </select>
           </div>
-          <div className="select-group">
+
+          <div className="filters-group">
             <label>Ordenar</label>
             <button
+              className="btn-filter-secondary"
               onClick={() =>
                 props.setSortBy(
                   props.sortBy === "titulo" ? "id" : "titulo"
@@ -111,9 +113,16 @@ export function Filters(props: any) {
               {props.sortBy === "titulo" ? "Título" : "Mais novos"}
             </button>
           </div>
-          <div className="select-group" style={{ marginLeft: 8 }}>
-            <button onClick={aplicarFiltro} style={{ height: 32 }}>Filtrar</button>
+
+          <div className="filters-group">
+            <button
+              className="btn-filter-primary"
+              onClick={aplicarFiltro}
+            >
+              Filtrar
+            </button>
           </div>
+
         </div>
       </div>
     </section>

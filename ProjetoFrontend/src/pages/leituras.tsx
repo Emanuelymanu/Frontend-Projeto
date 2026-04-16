@@ -273,14 +273,14 @@ export default function LeiturasPage() {
 
 
         {/* SEÇÃO DE TAGS */}
-        <div className="tags-section">
+
   <button
     className="btn-nova-tag"
     onClick={() => setMostrarModalTags(true)}
   >
-    🏷️ Gerenciar Tags
+     Gerenciar Tags
   </button>
-</div>
+
         <TagsManager
           tags={tags}
           setTags={setTags}

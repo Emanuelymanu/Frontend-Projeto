@@ -158,7 +158,7 @@ export function Dashboard() {
 
         {/* GÊNEROS MAIS LIDOS */}
         <div className="filter-card">
-          <h2>📚 Gêneros Mais Lidos</h2>
+          <h2> Gêneros Mais Lidos</h2>
           {generos_mais_lidos.length === 0 ? (
             <p className="empty-message">Nenhum gênero registrado ainda.</p>
           ) : (
@@ -185,7 +185,7 @@ export function Dashboard() {
 
         {/* PROGRESSO DE LEITURA */}
         <div className="progress-card">
-          <h2>📖 Progresso de Leitura</h2>
+          <h2> Progresso de Leitura</h2>
           <div className="progress-stats">
             <div className="progress-item">
               <div className="progress-label">
