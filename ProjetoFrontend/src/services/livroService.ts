@@ -7,6 +7,17 @@ interface ApiError {
 }
 
 class LivroService {
+    async buscarGoogleBooks(query: string): Promise<Livro[]> {
+        try {
+            const response = await api.get(`/livros/buscar?query=${encodeURIComponent(query)}`);
+            // Supondo que o backend retorna { livros: Livro[] }
+            return response.data.livros || [];
+        } catch (error) {
+            const axiosError = error as AxiosError<ApiError>;
+            console.error('Erro ao buscar livros no Google Books:', axiosError.message);
+            return [];
+        }
+    }
     async listar(): Promise<Livro[]> {
         try {
             const response = await api.get('/livros');

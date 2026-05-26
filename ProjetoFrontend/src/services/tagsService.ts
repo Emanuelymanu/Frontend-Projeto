@@ -1,4 +1,3 @@
-// frontend/src/services/tagService.ts
 import api from './api';
 import type { Tag, CriarTagDTO, AtualizarTagDTO, TagResponse } from '../types/tags';
 
