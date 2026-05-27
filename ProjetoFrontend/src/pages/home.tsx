@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Sidebar } from "../components/sidebar";
 import LivroService from "../services/livroService";
 import { LivroCard } from "../components/LivroCard";
+import GoogleBooksList from "../components/GoogleBooksList";
 
 import "../css/home.css";
 
@@ -13,10 +14,6 @@ function Home() {
 
   const [usuarioNome, setUsuarioNome] = useState("");
   const [topAvaliados, setTopAvaliados] = useState<any[]>([]);
-  // Google Books
-  const [buscaGoogle, setBuscaGoogle] = useState("");
-  const [livrosGoogle, setLivrosGoogle] = useState<any[]>([]);
-  const [buscandoGoogle, setBuscandoGoogle] = useState(false);
 
   useEffect(() => {
     if (!authService.isAuthenticated()) {
@@ -42,18 +39,6 @@ function Home() {
     }
   };
 
-  const buscarLivrosGoogle = async () => {
-    if (!buscaGoogle.trim()) return;
-    setBuscandoGoogle(true);
-    try {
-      const livros = await LivroService.buscarGoogleBooks(buscaGoogle);
-      setLivrosGoogle(livros);
-    } catch (e) {
-      setLivrosGoogle([]);
-    } finally {
-      setBuscandoGoogle(false);
-    }
-  };
 
   const handleLogout = () => {
     authService.logout();
@@ -72,6 +57,14 @@ function Home() {
           </div>
         </section>
 
+        <section className="google-books-section" style={{ marginTop: 32 }}>
+          <div className="section-header">
+            <div className="section-title">
+              <h2>Buscar Livros pelo Google Books</h2>
+            </div>
+          </div>
+          <GoogleBooksList />
+        </section>
         <section className="top-rated-section">
           <div className="section-header">
             <div className="section-title">
@@ -94,43 +87,8 @@ function Home() {
           </div>
         </section>
 
-        {/* Google Books Section */}
-        <section className="google-books-section" style={{ marginTop: 32 }}>
-          <div className="section-header">
-            <div className="section-title">
-              <h2>Buscar Livros no Google Books</h2>
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
-            <input
-              type="text"
-              value={buscaGoogle}
-              onChange={e => setBuscaGoogle(e.target.value)}
-              placeholder="Digite título, autor, etc."
-              disabled={buscandoGoogle}
-              style={{ flex: 1 }}
-            />
-            <button type="button" onClick={buscarLivrosGoogle} disabled={buscandoGoogle || !buscaGoogle.trim()}>
-              {buscandoGoogle ? "Buscando..." : "Buscar"}
-            </button>
-          </div>
-          <div className="books-scroll">
-            {livrosGoogle.map((livro, idx) => (
-              <div key={idx} className="book-card-wrapper">
-                <LivroCard
-                  livro={{
-                    ...livro,
-                    // Normalização para Google Books API
-                    titulo: (livro.volumeInfo?.title) || livro.titulo || livro.title || "Sem título",
-                    autor: (livro.volumeInfo?.authors ? livro.volumeInfo.authors.join(", ") : livro.autor || livro.authors?.join(", ") || ""),
-                    capa: (livro.volumeInfo?.imageLinks?.thumbnail) || livro.capa || (livro.imageLinks ? livro.imageLinks.thumbnail : undefined),
-                  }}
-                  onClick={() => { }}
-                />
-              </div>
-            ))}
-          </div>
-        </section>
+
+
       </main>
     </div>
   );
