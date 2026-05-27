@@ -1,28 +1,28 @@
 import Swal from "sweetalert2";
-    // Função para adicionar livro à biblioteca
-    const adicionarLivro = async (livro: any) => {
-        try {
-            // Monta o objeto esperado pelo backend (LivroInput)
-            const livroParaCadastro = {
-                titulo: livro.titulo,
-                autor: livro.autor,
-                genero: livro.genero || "",
-                tipo_obra: livro.tipo_obra,
-                num_paginas: String(livro.num_paginas || ""),
-                subtitulo: livro.subtitulo || "",
-                nome_serie: livro.nome_serie || "",
-                ano_publicacao: livro.ano_publicacao ? String(livro.ano_publicacao) : "",
-                editora: livro.editora || "",
-                status: "Quero Ler" as "Quero Ler",
-                avaliacao: 0,
-                capa: livro.capa || ""
-            };
-            await LivroService.criar(livroParaCadastro);
-            Swal.fire("Sucesso!", "Livro adicionado à sua biblioteca!", "success");
-        } catch (err: any) {
-            Swal.fire("Erro", err?.response?.data?.message || "Erro ao adicionar livro.", "error");
-        }
-    };
+// Função para adicionar livro à biblioteca
+const adicionarLivro = async (livro: any) => {
+    try {
+        // Monta o objeto esperado pelo backend (LivroInput)
+        const livroParaCadastro = {
+            titulo: livro.titulo,
+            autor: livro.autor,
+            genero: livro.genero || "",
+            tipo_obra: livro.tipo_obra,
+            num_paginas: String(livro.num_paginas || ""),
+            subtitulo: livro.subtitulo || "",
+            nome_serie: livro.nome_serie || "",
+            ano_publicacao: livro.ano_publicacao ? String(livro.ano_publicacao) : "",
+            editora: livro.editora || "",
+            status: "Quero Ler" as "Quero Ler",
+            avaliacao: 0,
+            capa: livro.capa || ""
+        };
+        await LivroService.criar(livroParaCadastro);
+        Swal.fire("Sucesso!", "Livro adicionado à sua biblioteca!", "success");
+    } catch (err: any) {
+        Swal.fire("Erro", err?.response?.data?.message || "Erro ao adicionar livro.", "error");
+    }
+};
 // Gera um id numérico a partir do id string do Google Books
 function stringToNumberId(str: string): number {
     let hash = 0;
