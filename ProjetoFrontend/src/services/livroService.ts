@@ -31,10 +31,10 @@ class LivroService {
 
     async criar(livro: LivroInput): Promise<Livro> {
         try {
-            const response = await api.post<LivroResponse>('/livros', livro);
-
-            if (response.data.sucesso && !Array.isArray(response.data.data)) {
-                return response.data.data;
+            const response = await api.post('/livros/cadastrar', livro);
+            // Aceita resposta: { mensagem, livro }
+            if (response.data && response.data.livro) {
+                return response.data.livro;
             }
             throw new Error('Erro ao criar livro');
         } catch (error) {

@@ -1,9 +1,12 @@
 import Swal from "sweetalert2";
 // Função para adicionar livro à biblioteca
-const adicionarLivro = async (livro: any) => {
+import { useNavigate } from "react-router-dom";
+
+const adicionarLivro = async (livro: any, navigate?: (path: string) => void) => {
     try {
         // Monta o objeto esperado pelo backend (LivroInput)
         const livroParaCadastro = {
+            id_google: livro.id_google || livro.id, // Garante o envio do id_google
             titulo: livro.titulo,
             autor: livro.autor,
             genero: livro.genero || "",
@@ -18,9 +21,20 @@ const adicionarLivro = async (livro: any) => {
             capa: livro.capa || ""
         };
         await LivroService.criar(livroParaCadastro);
-        Swal.fire("Sucesso!", "Livro adicionado à sua biblioteca!", "success");
+        await Swal.fire({
+            title: "Sucesso!",
+            text: "Livro adicionado à sua biblioteca!",
+            icon: "success",
+            confirmButtonText: "Ir para a biblioteca",
+            confirmButtonColor: "#3b82f6"
+        });
+        if (navigate) navigate("/biblioteca");
     } catch (err: any) {
-        Swal.fire("Erro", err?.response?.data?.message || "Erro ao adicionar livro.", "error");
+        if (err?.response?.status === 409) {
+            Swal.fire("Atenção", err?.response?.data?.message || "Este livro já está na sua estante!", "info");
+        } else {
+            Swal.fire("Erro", err?.response?.data?.message || "Erro ao adicionar livro.", "error");
+        }
     }
 };
 // Gera um id numérico a partir do id string do Google Books
@@ -44,6 +58,7 @@ export default function GoogleBooksList() {
     const [query, setQuery] = useState(""); // campo vazio por padrão
     const [books, setBooks] = useState<Livro[]>([]);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const searchBooks = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
@@ -87,6 +102,7 @@ export default function GoogleBooksList() {
                     const info = (livro as any).volumeInfo || {};
                     const livroCorrigido = {
                         id_livro: (livro as any).id ? stringToNumberId((livro as any).id) : idx,
+                        id_google: (livro as any).id || undefined,
                         titulo: info.title || "Sem título",
                         autor: info.authors ? info.authors.join(", ") : "",
                         capa: info.imageLinks?.thumbnail,
@@ -114,7 +130,7 @@ export default function GoogleBooksList() {
                                     cursor: "pointer",
                                     fontWeight: "bold"
                                 }}
-                                onClick={() => adicionarLivro(livroCorrigido)}
+                                onClick={() => adicionarLivro(livroCorrigido, navigate)}
                             >
                                 Adicionar à biblioteca
                             </button>

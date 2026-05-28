@@ -64,15 +64,15 @@ export function CadastroLivro() {
       return;
     }
     if (!autor) {
-      showWarningToast("Título é obrigatório");
+      showWarningToast("autor é obrigatório");
       return;
     }
     if (!numPaginas) {
-      showWarningToast("Título é obrigatório");
+      showWarningToast("Número de páginas é obrigatório");
       return;
     }
     if (!capaFile) {
-      showWarningToast("Título é obrigatório");
+      showWarningToast("capa é obrigatório");
       return;
     }
     setLoading(true);
