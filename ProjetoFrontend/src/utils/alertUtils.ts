@@ -1,7 +1,6 @@
 import Swal from "sweetalert2";
-import type { LoginResponse } from "../types";
 
-export const showSuccessToast = (message: string, response?: LoginResponse) => {
+export const showSuccessToast = (message: string) => {
   const Toast = Swal.mixin({
     toast: true,
     position: 'top-end',

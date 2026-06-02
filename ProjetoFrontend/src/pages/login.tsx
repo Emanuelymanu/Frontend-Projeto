@@ -39,7 +39,7 @@ export function Login() {
     try {
       const response = await authService.login({ email, senha });
 
-      showSuccessToast('Login realizado com sucesso!', response);
+      showSuccessToast('Login realizado com sucesso!');
 
       if (response?.token) {
         localStorage.setItem('token', response.token);

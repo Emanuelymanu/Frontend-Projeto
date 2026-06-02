@@ -35,7 +35,7 @@ export function MeuPerfil() {
 
   const [nome, setNome] = useState("");
   const [cpf, setCpf] = useState("");
-  const [senhaAtual, setSenhaAtual] = useState("");
+  const [, setSenhaAtual] = useState("");
   const [novaSenha, setNovaSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
 
