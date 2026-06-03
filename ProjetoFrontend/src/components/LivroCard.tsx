@@ -8,18 +8,19 @@ interface LivroCardProps {
 
 export function LivroCard({ livro, onClick }: LivroCardProps) {
   let capaUrl = livro.capa;
+  const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL || 'http://localhost:3000/uploads';
 
   if (capaUrl && !capaUrl.startsWith('http')) {
-    capaUrl = `http://localhost:3000/uploads/${capaUrl}`;
+    capaUrl = `${uploadsBaseUrl}/${capaUrl}`;
   }
 
   function normalizarStatus(status: string) {
     return status
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') 
+      .replace(/[\u0300-\u036f]/g, '')
       .replace(/ç/g, 'c')
-      .replace(/\s+/g, '_'); 
+      .replace(/\s+/g, '_');
   }
 
   const statusMap: Record<string, string> = {
