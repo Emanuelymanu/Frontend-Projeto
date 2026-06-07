@@ -8,7 +8,7 @@ interface LivroCardProps {
 
 export function LivroCard({ livro, onClick }: LivroCardProps) {
   let capaUrl = livro.capa;
-  const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL || 'http://localhost:3000/uploads';
+  const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL || '/upload/capa';
 
   if (capaUrl && !capaUrl.startsWith('http')) {
     capaUrl = `${uploadsBaseUrl}/${capaUrl}`;
