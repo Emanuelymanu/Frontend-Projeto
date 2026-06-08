@@ -13,11 +13,13 @@ import {
     showSuccessAlert,
     showErrorAlert,
 } from "../utils/alertUtils";
+import { normalizeImageUrl } from "../utils/imageUrl";
 
 export function EditarLivro() {
     const location = useLocation();
     const navigate = useNavigate();
     const livro = location.state?.livro as Livro;
+    const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL || '/upload/capa';
 
     const [loading, setLoading] = useState(false);
     const [titulo, setTitulo] = useState(livro?.titulo || "");
@@ -30,7 +32,7 @@ export function EditarLivro() {
     const [genero, setGenero] = useState(livro?.genero || "");
     const [editora, setEditora] = useState(livro?.editora || "");
     const [capaFile, setCapaFile] = useState<File | null>(null);
-    const [capaPreview, setCapaPreview] = useState(livro?.capa || "");
+    const [capaPreview, setCapaPreview] = useState(normalizeImageUrl(livro?.capa, uploadsBaseUrl));
     const [status, setStatus] = useState<StatusLeitura | "">("");
     const [avaliacao, setAvaliacao] = useState("0");
 
@@ -50,7 +52,7 @@ export function EditarLivro() {
             reader.readAsDataURL(file);
         } else {
             setCapaFile(null);
-            setCapaPreview(livro?.capa || "");
+            setCapaPreview(normalizeImageUrl(livro?.capa, uploadsBaseUrl));
         }
     };
 

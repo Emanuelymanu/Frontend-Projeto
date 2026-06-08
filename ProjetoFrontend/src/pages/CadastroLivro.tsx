@@ -5,10 +5,12 @@ import LivroServiceUpload from "../services/livroServiceUpload";
 import { Sidebar } from "../components/sidebar";
 import "../css/CadastroLivro.css";
 import { showErrorAlert, showSuccessAlert, showWarningToast } from '../utils/alertUtils';
+import { normalizeImageUrl } from '../utils/imageUrl';
 
 
 export function CadastroLivro() {
   const navigate = useNavigate();
+  const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL || '/upload/capa';
   const [loading, setLoading] = useState(false);
   const [titulo, setTitulo] = useState("");
   const [subtitulo, setSubtitulo] = useState("");
@@ -48,8 +50,9 @@ export function CadastroLivro() {
     setEditora(volumeInfo.publisher || livro.editora || "");
     setGenero((volumeInfo.categories && volumeInfo.categories[0]) || livro.genero || "");
     setNumPaginas(volumeInfo.pageCount || livro.num_paginas || "");
-    if (volumeInfo.imageLinks?.thumbnail || livro.capa) {
-      setCapaPreview(volumeInfo.imageLinks?.thumbnail || livro.capa);
+    const previewUrl = normalizeImageUrl(volumeInfo.imageLinks?.thumbnail || livro.capa, uploadsBaseUrl);
+    if (previewUrl) {
+      setCapaPreview(previewUrl);
     }
   };
   const handleLogout = () => {
@@ -148,7 +151,7 @@ export function CadastroLivro() {
             <div className="resultados-google-books" style={{ maxHeight: 200, overflowY: 'auto', marginBottom: 16 }}>
               {resultadosGoogle.map((livro, idx) => {
                 const volumeInfo = livro.volumeInfo || livro;
-                const capa = volumeInfo.imageLinks?.thumbnail || livro.capa;
+                const capa = normalizeImageUrl(volumeInfo.imageLinks?.thumbnail || livro.capa, uploadsBaseUrl);
                 const titulo = volumeInfo.title || livro.titulo || "Sem título";
                 const autor = (volumeInfo.authors ? volumeInfo.authors.join(", ") : livro.autor || "");
                 return (
