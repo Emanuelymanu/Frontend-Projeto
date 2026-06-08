@@ -1,16 +1,13 @@
 import { useState } from "react";
-import LivroService from "../services/livroService";
 import { useNavigate } from "react-router-dom";
 import LivroServiceUpload from "../services/livroServiceUpload";
 import { Sidebar } from "../components/sidebar";
 import "../css/CadastroLivro.css";
 import { showErrorAlert, showSuccessAlert, showWarningToast } from '../utils/alertUtils';
-import { normalizeImageUrl } from '../utils/imageUrl';
 
 
 export function CadastroLivro() {
   const navigate = useNavigate();
-  const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL || '/upload/capa';
   const [loading, setLoading] = useState(false);
   const [titulo, setTitulo] = useState("");
   const [subtitulo, setSubtitulo] = useState("");
@@ -23,38 +20,6 @@ export function CadastroLivro() {
   const [editora, setEditora] = useState("");
   const [capaFile, setCapaFile] = useState<File | null>(null);
   const [capaPreview, setCapaPreview] = useState("");
-
-  // Google Books
-  const [buscaLivro, setBuscaLivro] = useState("");
-  const [resultadosGoogle, setResultadosGoogle] = useState<any[]>([]);
-  const [buscando, setBuscando] = useState(false);
-
-  const handleBuscarGoogleBooks = async () => {
-    if (!buscaLivro.trim()) return;
-    setBuscando(true);
-    try {
-      const livros = await LivroService.buscarGoogleBooks(buscaLivro);
-      setResultadosGoogle(livros);
-    } catch (e) {
-      showErrorAlert("Erro ao buscar livros no Google Books");
-    } finally {
-      setBuscando(false);
-    }
-  };
-
-  const preencherCamposLivro = (livro: any) => {
-    const volumeInfo = livro.volumeInfo || livro;
-    setTitulo(volumeInfo.title || livro.titulo || "");
-    setAutor((volumeInfo.authors ? volumeInfo.authors.join(", ") : livro.autor || ""));
-    setAnoPublicacao(volumeInfo.publishedDate || livro.ano_publicacao || "");
-    setEditora(volumeInfo.publisher || livro.editora || "");
-    setGenero((volumeInfo.categories && volumeInfo.categories[0]) || livro.genero || "");
-    setNumPaginas(volumeInfo.pageCount || livro.num_paginas || "");
-    const previewUrl = normalizeImageUrl(volumeInfo.imageLinks?.thumbnail || livro.capa, uploadsBaseUrl);
-    if (previewUrl) {
-      setCapaPreview(previewUrl);
-    }
-  };
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.location.href = "/login";
@@ -131,46 +96,6 @@ export function CadastroLivro() {
       <main className="main-content">
         <h1>Cadastrar Livro</h1>
         <div className="form-wrapper">
-          {/* Busca Google Books */}
-          <div className="input-group">
-            <label>Buscar Livro no Google Books</label>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <input
-                type="text"
-                value={buscaLivro}
-                onChange={e => setBuscaLivro(e.target.value)}
-                placeholder="Digite título, autor, etc."
-                disabled={buscando}
-              />
-              <button type="button" onClick={handleBuscarGoogleBooks} disabled={buscando || !buscaLivro.trim()}>
-                {buscando ? "Buscando..." : "Buscar"}
-              </button>
-            </div>
-          </div>
-          {resultadosGoogle.length > 0 && (
-            <div className="resultados-google-books" style={{ maxHeight: 200, overflowY: 'auto', marginBottom: 16 }}>
-              {resultadosGoogle.map((livro, idx) => {
-                const volumeInfo = livro.volumeInfo || livro;
-                const capa = normalizeImageUrl(volumeInfo.imageLinks?.thumbnail || livro.capa, uploadsBaseUrl);
-                const titulo = volumeInfo.title || livro.titulo || "Sem título";
-                const autor = (volumeInfo.authors ? volumeInfo.authors.join(", ") : livro.autor || "");
-                return (
-                  <div key={idx} style={{ border: '1px solid #ccc', padding: 8, marginBottom: 4, cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={() => preencherCamposLivro(livro)}>
-                    {capa ? (
-                      <img src={capa} alt="capa" style={{ width: 40, height: 60, objectFit: 'cover', marginRight: 8 }} />
-                    ) : (
-                      <span style={{ width: 40, height: 60, display: 'inline-block', background: '#eee', marginRight: 8 }} />
-                    )}
-                    <div>
-                      <div><b>{titulo}</b></div>
-                      <div style={{ fontSize: 12 }}>{autor}</div>
-                    </div>
-                  </div>
-                );
-              })}
-              <div style={{ fontSize: 12, color: '#888' }}>(Clique em um livro para preencher o formulário)</div>
-            </div>
-          )}
           <form onSubmit={handleSubmit} className="form-cadastro">
             <div className="input-group">
               <label>Capa</label>

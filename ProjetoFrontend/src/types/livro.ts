@@ -33,6 +33,7 @@ export interface CriarLivroDTO {
     genero?: string;
     status?: string;
     avaliacao?: number;
+    id_google?: string;
 }
 export interface LivroInput {
     titulo: string;

@@ -8,6 +8,7 @@ import "../css/biblioteca.css";
 import LivroService from "../services/livroService";
 import type { Livro } from "../types/livro";
 import { showConfirmDialog, showSuccessToast } from '../utils/alertUtils';
+import { normalizeImageUrl } from '../utils/imageUrl';
 
 
 export function Biblioteca() {
@@ -150,7 +151,7 @@ export function Biblioteca() {
 
             {livroSelecionado.capa && (
               <img
-                src={livroSelecionado.capa}
+                src={normalizeImageUrl(livroSelecionado.capa)}
                 alt={livroSelecionado.titulo}
                 style={{ maxWidth: "200px", margin: "10px 0" }}
               />
