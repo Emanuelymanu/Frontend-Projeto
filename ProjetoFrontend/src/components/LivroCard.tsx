@@ -1,5 +1,6 @@
 import '../css/LivroCard.css';
 import type { Livro } from "../types/livro";
+import { normalizeImageUrl } from '../utils/imageUrl';
 
 interface LivroCardProps {
   livro: Livro & { status?: string };
@@ -7,19 +8,16 @@ interface LivroCardProps {
 }
 
 export function LivroCard({ livro, onClick }: LivroCardProps) {
-  let capaUrl = livro.capa;
-
-  if (capaUrl && !capaUrl.startsWith('http')) {
-    capaUrl = `http://localhost:3000/uploads/${capaUrl}`;
-  }
+  const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL || '/upload/capa';
+  const capaUrl = normalizeImageUrl(livro.capa, uploadsBaseUrl);
 
   function normalizarStatus(status: string) {
     return status
       .toLowerCase()
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') 
+      .replace(/[\u0300-\u036f]/g, '')
       .replace(/ç/g, 'c')
-      .replace(/\s+/g, '_'); 
+      .replace(/\s+/g, '_');
   }
 
   const statusMap: Record<string, string> = {

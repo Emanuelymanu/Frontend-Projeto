@@ -65,6 +65,7 @@ function Home() {
           </div>
           <GoogleBooksList />
         </section>
+
         <section className="top-rated-section">
           <div className="section-header">
             <div className="section-title">
