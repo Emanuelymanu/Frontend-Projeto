@@ -1,5 +1,6 @@
 import '../css/LivroCard.css';
 import type { Livro } from "../types/livro";
+import { normalizeImageUrl } from '../utils/imageUrl';
 
 interface LivroCardProps {
   livro: Livro & { status?: string };
@@ -7,12 +8,8 @@ interface LivroCardProps {
 }
 
 export function LivroCard({ livro, onClick }: LivroCardProps) {
-  let capaUrl = livro.capa;
   const uploadsBaseUrl = import.meta.env.VITE_UPLOADS_URL || '/upload/capa';
-
-  if (capaUrl && !capaUrl.startsWith('http')) {
-    capaUrl = `${uploadsBaseUrl}/${capaUrl}`;
-  }
+  const capaUrl = normalizeImageUrl(livro.capa, uploadsBaseUrl);
 
   function normalizarStatus(status: string) {
     return status

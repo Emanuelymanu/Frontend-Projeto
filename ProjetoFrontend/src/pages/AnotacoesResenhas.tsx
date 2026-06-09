@@ -5,6 +5,7 @@ import type { Leitura } from "../types/leitura";
 import type { Anotacao } from "../types/anotacao";
 import { Sidebar } from "../components/sidebar";
 import "../css/anotacao-resenhas.css";
+import { normalizeImageUrl } from "../utils/imageUrl";
 
 export function AnotacoesResenhas() {
     const [leituras, setLeituras] = useState<Leitura[]>([]);
@@ -94,7 +95,7 @@ export function AnotacoesResenhas() {
                                     <div className="resenha-header" onClick={() => toggleExpand(leitura.id_leitura)}>
                                         {leitura.livro?.capa && (
                                             <img
-                                                src={leitura.livro.capa}
+                                                src={normalizeImageUrl(leitura.livro.capa)}
                                                 alt={leitura.livro.titulo}
                                                 className="resenha-capa"
                                             />
